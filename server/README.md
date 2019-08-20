@@ -23,5 +23,7 @@ Make sure you start your mongo server before continue.
 After you installed all of the dependencies above you can run `yarn` to install project dependencies
 
 `yarn dev` - To run server in development
+
 `yarn build` - To build server for production
+
 `yarn prod` - To run server in production mode
