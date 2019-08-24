@@ -13,8 +13,11 @@ server.listen({ port: 8000 }, () => {
   console.log(`Server ready at 8000`);
 });
 
-
 app.get('/', (req, res) => {
-
   res.send('hello world');
+});
+
+app.post('/webhook', (req, res) => {
+  console.log(req.body);
+  res.send('OK');
 });
