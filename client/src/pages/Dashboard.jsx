@@ -36,7 +36,6 @@ export default () => {
     return <Redirect to="/login" />;
   }
 
-  console.log(user);
   if (user.role !== 'ADMIN') {
     alert('Missing admin role');
     return <Redirect to="/login" />;
