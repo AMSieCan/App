@@ -1,3 +1,2 @@
-# CST499
-
-CHECK README INSIDE PROJECT DIRECTORY
+# App
+Online application for viewing status of smart garbage bins
