@@ -26,7 +26,10 @@ export const device = mongoose.model(
   'device',
   new mongoose.Schema(
     {
-      _id: String,
+      _id: {
+        type: String,
+        default: () => uuid(),
+      },
       name: String,
       serialNumber: String,
       locationDescription: String,
