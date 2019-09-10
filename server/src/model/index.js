@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+var mongoose = require('mongoose');
+require('mongoose-type-email');
 import uuid from 'uuid/v4';
 
 export const userModel = mongoose.model(
@@ -9,7 +10,7 @@ export const userModel = mongoose.model(
         type: String,
         default: () => uuid(),
       },
-      emailAddress: String,
+      emailAddress: mongoose.SchemaTypes.Email,
       password: String,
       role: String,
     },
