@@ -14,3 +14,7 @@ code {
   height: 680px;
   width: 100%;
 }
+
+.trash {
+  color: darkviolet;
+}

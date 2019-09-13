@@ -10,7 +10,7 @@ const Pointer = (params) => {
         style={{ top: '-77px', left: '-77px' }}
         className="fade show popover bs-popover-top p-2"
       >
-        <div className="popover-body">TRASH BIN</div>
+        <i class="trash icon big">Bin</i>
       </div>
     </div>
   );
@@ -22,13 +22,15 @@ export default () => {
       <GoogleMapReact
         bootstrapURLKeys={{ key: 'AIzaSyCBuMSPKaYOdjho5xbYDW6n_yjmSk_ZpRI' }}
         defaultCenter={{
-          lat: 37.56309621221321,
-          lng: -122.31872069999997,
+          lat: 36.653767,
+          lng: -121.798460,
         }}
-        defaultZoom={20}
+        defaultZoom={19}
       >
-        <Pointer lat={37.56309621221321} lng={-122.31872069999997} />
-        <Pointer lat={37.66309621221321} lng={-121.31872069999997} />
+        <Pointer lat={36.654121} lng={-121.797348} />
+        <Pointer lat={36.654138} lng={-121.799875} />
+        <Pointer lat={36.653570} lng={-121.799310} />
+        <Pointer lat={36.653368} lng={-121.798060} />
       </GoogleMapReact>
     </div>
   );
