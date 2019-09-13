@@ -1,22 +1,48 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react';
 
+
+class BinStatus extends React.Component {
+  render() {
+    
+    return (
+        <div>
+        <h1>Bin Stats</h1>
+        </div>
+      )
+  }
+}
+
+
+
 const Pointer = (params) => {
+const handleClick = ()=> {
+      return (
+        console.log("bin stats")
+        )
+      }
+  
+
+
   return (
     <div>
       <div
         role="tooltip"
         x-placement="top"
         style={{ top: '-77px', left: '-77px' }}
-        className="fade show popover bs-popover-top p-2"
-      >
+        className="fade show popover bs-popover-top p-2">
+        
         <i class="trash icon big">Bin</i>
       </div>
+      <BinStatus />
     </div>
+
   );
 };
 
+
 export default () => {
+
   return (
     <div className="googleMap">
       <GoogleMapReact
@@ -35,3 +61,4 @@ export default () => {
     </div>
   );
 };
+
