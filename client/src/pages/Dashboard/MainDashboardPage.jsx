@@ -44,11 +44,13 @@ const Pointer = (params) => {
       
         <div>
           <Drawer open={bin} onChange={()=>setBin(undefined)}>
-            <ul>
+            {val =>
+            <ul style={{ opacity: 300 / val }}>
               <li>home</li>
               <li>about</li>
               <li>settings</li>
             </ul>
+          }
           </Drawer>
         </div>
     </div>
