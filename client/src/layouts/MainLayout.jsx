@@ -7,15 +7,18 @@ const MainLayout = ({ children, history }) => {
   return (
     <div>
       <div>
-        <Menu>
+        <Menu color='blue fixed' inverted>
+          <Menu.Item>
+            <i class="trash icon" style={{color: 'white'}}></i> AMSie Can
+          </Menu.Item>
           <Link to="/">
-            <Menu.Item name="editorials" />
+            <Menu.Item name="Map" />
           </Link>
           <Link to="/s">
-            <Menu.Item name="editorials" />
+            <Menu.Item name="Service" />
           </Link>
           <Link to="/s2">
-            <Menu.Item name="editorials" />
+            <Menu.Item name="Help" />
           </Link>
           <Menu.Item
             name="Logout"
