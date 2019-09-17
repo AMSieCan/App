@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Drawer from 'react-motion-drawer';
+import DrawerInfo from '../../layouts/DrawerInfo.js'
+
+
 
 const Pointer = ({ onClick, name, status }) => {
   return (
@@ -41,7 +44,7 @@ export default () => {
           />
           <Pointer name="DEF" status="Not full" onClick={(data) => setBin(data)} lat={36.654138} lng={-121.799875} />
           <Pointer name="HIJ" status="Not full" onClick={(data) => setBin(data)} lat={36.65357} lng={-121.79931} />
-          <Pointer name="LMO" status="Not full" onClick={(data) => setBin(data)} lat={36.653368} lng={-121.79806} />
+          <Pointer name="LMO" status="full" onClick={(data) => setBin(data)} lat={36.653368} lng={-121.79806} />
         </GoogleMapReact>
       </div>
       <Drawer
@@ -56,33 +59,12 @@ export default () => {
       >
         {bin && 
         <div>
-          <div class="ui list" style={{padding: '20px'}} >
-            <div class="item" >
-              <div class="header"><h3>Unit Information: 
-              <h3>{bin.name}</h3></h3>
-              </div>
-                 <div class="header">Location Description</div>
-                 (description)
-                 <div class="header">Last Visited</div>
-                 (Days ago)
-                 <div class="header">Current Status</div>
-                 (10% used)
-                 <p>{bin.status}</p>
-                 <div class="header">Equipment Info</div>
-                 (Battery OK)
-                 (Status OK)
-                 <div class="header">Serial Info</div>
-                 (1234ABCD)
-            </div>
-            <div class="item">
-              <div class="header"><h4>Maintenance</h4></div>
-                <div class="header"><a href="">Schedule Visit</a></div>
-                <div class="header"><a href=""> Current Scheduled Reports</a></div>
-                <div class="header"><a href="">All Unit Status and Configuration</a></div>
-              </div>
-            </div>
 
-          
+          <DrawerInfo 
+            binName = {bin.name}
+            binStatus = {bin.status}
+
+          />
           
         </div>}
       </Drawer>
