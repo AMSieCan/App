@@ -5,6 +5,7 @@ import { Redirect, Switch, Route } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import MainLayout from '../layouts/MainLayout';
 import MainDashboardPage from './Dashboard/MainDashboardPage';
+import ServicePage from './Dashboard/ServicePage';
 
 export default () => {
   const [user, setUser] = useState();
@@ -44,7 +45,7 @@ export default () => {
     <MainLayout>
       <Switch>
         <Route path="/" exact component={MainDashboardPage} />
-        <Route path="/s" exact component={MainDashboardPage} />
+        <Route path="/s" exact component={ServicePage} />
         <Route path="/s1" exact component={MainDashboardPage} />
       </Switch>
     </MainLayout>
