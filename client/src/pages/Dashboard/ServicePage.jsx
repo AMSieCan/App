@@ -9,7 +9,65 @@ class ServiceRequest extends React.Component {
 	render() {
 		return(
 			<div>
-				<h1> Service Request Page</h1>
+				<h1>Service Request Page</h1>
+				<table class="ui compact celled definition table">
+  					<thead>
+    					<tr>
+	      					<th>Serial Number</th>
+      						<th>Location Description</th>
+      						<th>Status</th>
+      						<th>Service</th>
+    					</tr>
+  					</thead>
+  					<tbody>
+	    				<tr>
+      						<td>3b003b001747373333353132</td>
+      						<td>Student Store</td>
+      						<td>80%</td>
+      						<td class="collapsing">
+	        					<div class="ui fitted slider checkbox">
+          							<input type="checkbox"/> <label></label>
+        						</div>
+      						</td>
+    					</tr>
+						<tr>
+	      					<td>2222</td>
+      						<td>Cafeteria</td>
+      						<td>20%</td>
+      						<td class="collapsing">
+	        					<div class="ui fitted slider checkbox">
+          							<input type="checkbox"/> <label></label>
+        						</div>
+      						</td>
+    					</tr>
+						<tr>
+	      					<td>3333</td>
+      						<td>North Parking Lot</td>
+      						<td>100%</td>
+      						<td class="collapsing">
+	        					<div class="ui fitted slider checkbox">
+          							<input type="checkbox"/> <label></label>
+        						</div>
+      						</td>
+    					</tr>
+  					</tbody>
+  					<tfoot class="full-width">
+	    				<tr>
+      						<th></th>
+      						<th colspan="4">
+	        					<div class="ui right floated small primary labeled icon button">
+		        					<i class="user icon"></i> Request
+        						</div>
+        						<div class="ui small button">
+				          			Approve
+        						</div>
+        						<div class="ui small disabled button">
+			          				Approve All
+        						</div>
+      						</th>
+    					</tr>
+  					</tfoot>
+				</table>
 			</div>
 		)
 	}
