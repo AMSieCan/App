@@ -41,7 +41,7 @@ class ScheduleVisit extends React.Component {
 
       <div>
         <button>Schedule Visit </button>
-        <div>{this.prop.binname}</div>
+        <div></div>
       </div>
       )
   }
