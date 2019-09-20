@@ -1,4 +1,5 @@
 import React from "react"
+import binData from "./../binData"
 
 
 
@@ -34,13 +35,41 @@ function DrawerInfo(prop){
 class ScheduleVisit extends React.Component {
   constructor() {
     super()
+
+    this.state = {
+    	binInfo: binData,
+    	
+    }
+
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+ 
+  handleClick(name){
+  	this.setState(prevState => {
+            const updatedBinData = prevState.binInfo.map(bin => {
+                if (bin.name === name) {
+                    bin.setSchedule = !bin.setSchedule
+                    console.log("set schedule" + bin.setSchedule)
+                }
+                return bin
+            })
+            return {
+                binInfo: updatedBinData
+            }
+        })
+  	
+  	
   }
 
   render() {
+  	// const todoItems = this.state.todos.map(item => <TodoItem key={item.id} item={item}
+  	// const binInfo = this.state.binInfo.map(bin=> )
+  	
     return(
 
       <div>
-        <button>Schedule Visit </button>
+        <button onClick={()=>{this.handleClick(this.props.binname)}}>s{this.state.setSchedule ? "Scheduled" : "Schedule Service"}</button>
         <div></div>
       </div>
       )
