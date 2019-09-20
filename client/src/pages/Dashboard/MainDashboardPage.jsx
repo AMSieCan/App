@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Drawer from 'react-motion-drawer';
 import DrawerInfo from '../../layouts/DrawerInfo.js'
+import binData from '../../binData'
 
 
 
-const Pointer = ({ onClick, name, status }) => {
+const Pointer = ({ onClick, name, status, location }) => {
   return (
     <div>
       <div
-        onClick={() => onClick({ name, status })}
+        onClick={() => onClick({ name, status, location })}
         role="tooltip"
         x-placement="top"
         style={{ top: '-77px', left: '-77px' }}
@@ -36,15 +37,16 @@ export default () => {
           defaultZoom={19}
         >
           <Pointer
-            name="ABC"
-            status="Not Full"
+            name={binData[0].name}
+            status={binData[0].status}
             onClick={(data) =>setBin(data)}
-            lat={36.654121}
-            lng={-121.797348}
+            lat={binData[0].lat}
+            lng={binData[0].long}
+            location={binData[0].locationDescription}
           />
-          <Pointer name="DEF" status="Not full" onClick={(data) => setBin(data)} lat={36.654138} lng={-121.799875} />
-          <Pointer name="HIJ" status="Not full" onClick={(data) => setBin(data)} lat={36.65357} lng={-121.79931} />
-          <Pointer name="LMO" status="full" onClick={(data) => setBin(data)} lat={36.653368} lng={-121.79806} />
+          <Pointer name={binData[1].name} status={binData[1].status} onClick={(data) => setBin(data)} lat={binData[1].lat} lng={binData[1].long} location={binData[1].locationDescription}/>
+          <Pointer name={binData[2].name} status={binData[2].status} onClick={(data) => setBin(data)} lat={binData[2].lat} lng={binData[2].long} location={binData[2].locationDescription}/>
+          <Pointer name={binData[3].name} status={binData[3].status} onClick={(data) => setBin(data)} lat={binData[3].lat} lng={binData[3].long} location={binData[3].locationDescription}/>
         </GoogleMapReact>
       </div>
       <Drawer
@@ -63,8 +65,9 @@ export default () => {
           <DrawerInfo 
             binName = {bin.name}
             binStatus = {bin.status}
-
+            binLocation = {bin.location}
           />
+          
           
         </div>}
       </Drawer>
