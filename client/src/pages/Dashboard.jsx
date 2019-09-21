@@ -6,6 +6,8 @@ import Cookies from 'js-cookie';
 import MainLayout from '../layouts/MainLayout';
 import MainDashboardPage from './Dashboard/MainDashboardPage';
 import ServicePage from './Dashboard/ServicePage';
+import DevicesPage from './Dashboard/DevicesPage';
+import UsersPage from './Dashboard/UsersPage';
 
 export default () => {
   const [user, setUser] = useState();
@@ -47,6 +49,8 @@ export default () => {
         <Route path="/" exact component={MainDashboardPage} />
         <Route path="/s" exact component={ServicePage} />
         <Route path="/s1" exact component={MainDashboardPage} />
+        <Route path="/devices" exact component={DevicesPage} />
+        <Route path="/users" exact component={UsersPage} />
       </Switch>
     </MainLayout>
   );

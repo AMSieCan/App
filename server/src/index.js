@@ -4,6 +4,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import db from './db/db';
 import { loginUser, createUser, verifyAccessToken, me } from './app/user';
+import { serialNumber, locationDescription, addDevice } from './app/device';
+import { device } from './model';
 const app = express();
 db();
 
@@ -57,6 +59,26 @@ app.post('/signup', async (req, res) => {
 
     // Validate user
     const token = await createUser(emailAddress.toLowerCase(), password);
+
+    res.send(token);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+});
+
+app.post('/devices', async (req, res) => {
+  try {
+    // Validate serial number and location
+    const { serialNumber, locationDescription } = req.body;
+    if (!serialNumber) {
+      return res.status(400).send({ message: 'Serial number is not valid!' });
+    }
+    if (!locationDescription) {
+      return res.status(400).send({ message: 'You must enter a location description.' });
+    }
+
+    // Validate device
+    const token = await addDevice(serialNumber.toLowerCase(), locationDescription);
 
     res.send(token);
   } catch (err) {

@@ -17,6 +17,12 @@ const MainLayout = ({ children, history }) => {
           <Link to="/s">
             <Menu.Item name="Service" />
           </Link>
+          <Link to="/devices">
+            <Menu.Item name="Devices" />
+          </Link>
+          <Link to="/users">
+            <Menu.Item name="Users" />
+          </Link>
           <Link to="/s2">
             <Menu.Item name="Help" />
           </Link>
