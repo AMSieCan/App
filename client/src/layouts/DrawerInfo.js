@@ -35,9 +35,11 @@ function DrawerInfo(prop){
 class ScheduleVisit extends React.Component {
   constructor() {
     super()
+    
 
     this.state = {
     	binInfo: binData,
+      binVisit: "binData.setSchedule"
     	
     }
 
@@ -50,35 +52,45 @@ class ScheduleVisit extends React.Component {
             const updatedBinData = prevState.binInfo.map(bin => {
                 if (bin.name === name) {
                     bin.setSchedule = !bin.setSchedule
-                    console.log("set schedule" + bin.setSchedule)
+                    console.log("set schedule " + bin.setSchedule)
+                   
                 }
                 return bin
             })
+
             return {
                 binInfo: updatedBinData
             }
         })
-  	
-  	
+  }
+
+  visit(name) {
+   const word = this.state.binInfo.map(bin=>{
+    if(bin.name == name) {
+        if(bin.setSchedule) {
+          return  "Scheduled"
+        } else {
+          return "Schedule Visit?"
+        }
+    }
+   })
+   return word
+   
   }
 
   render() {
   	// const todoItems = this.state.todos.map(item => <TodoItem key={item.id} item={item}
   	// const binInfo = this.state.binInfo.map(bin=> )
+  
   	
     return(
 
       <div>
-        <button onClick={()=>{this.handleClick(this.props.binname)}}>s{this.state.setSchedule ? "Scheduled" : "Schedule Service"}</button>
+        <button onClick={()=>{this.handleClick(this.props.binname)}}>{this.visit(this.props.binname)}</button>
         <div></div>
       </div>
       )
   }
 }
-
-
-
-
-
 
 export default DrawerInfo
