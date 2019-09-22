@@ -4,6 +4,7 @@ import Drawer from 'react-motion-drawer';
 import DrawerInfo from '../../layouts/DrawerInfo.js'
 import binData from "../../binData"
 import ScheduledVisit from "../../layouts/ScheduledVisit"
+import Map from "./Map"
 
 
 
@@ -25,9 +26,16 @@ class ServiceRequest extends React.Component {
 export default () => {
   
   return (
-  	<div>
-  		<h1>hello</h1>
-  		<ServiceRequest />
+  	<div className="ui grid">
+      <div className="six wide column">
+    		<h1>hello</h1>
+    		<ServiceRequest />
+      </div>
+      <div className="ten wide column">
+        
+        <Map style={{height: "50px"}} />
+        
+      </div>
   	</div>
   )
 }

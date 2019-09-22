@@ -5,9 +5,36 @@ import binData from "./../binData"
 
 
 class ScheduledVisit extends React.Component {
+	 constructor() {
+	    super()
+    
+    	this.state = {
+    		binInfo: binData
+    	
+    	}
+
+    	this.handleChange = this.handleChange.bind(this)
+  	}
+
+ 
+	  handleChange(name){
+	  	this.setState(prevState => {
+	            const updatedBinData = prevState.binInfo.map(bin => {
+	                if (bin.name === name) {
+	                    bin.setSchedule = !bin.setSchedule
+	                    console.log("set schedule " + bin.setSchedule)
+	                   
+	                }
+	                return bin
+	            })
+
+	            return {
+	                binInfo: updatedBinData
+	            }
+	        })
+	  }
 
 	render() {
-		
 		   const binRequest = binData.map(bin=>{
 		   		if(bin.setSchedule) {
 		   			return (
@@ -17,16 +44,26 @@ class ScheduledVisit extends React.Component {
 								<td>{bin.status}%</td>
 								<td class="collapsing">
 									<div class="ui fitted slider checkbox">
-           								<input type="checkbox" checked={bin.setSchedule}/> <label></label>
+           								<input 	id={bin.name} type="checkbox" 
+           										checked={bin.setSchedule}
+           										onChange={() => this.handleChange(bin.name)}
+           								/> 
+
+           								<label></label>
            							</div>
  								</td>
 						</tr>
 		   			)
 		   		}
+
 		   	})
+
+
+		   
 		   
 		return (
-					<table class="ui celled striped table">
+				<div>
+					<table class="ui very basic table">
   					<thead>
     					<tr>
 	      					<th>Serial Number</th>
@@ -43,18 +80,15 @@ class ScheduledVisit extends React.Component {
       						<th></th>
       						<th colspan="3">
 	        					<div class="ui right floated small primary labeled icon button">
-		        					<i class="user icon"></i> Request
+		        					<i class="user icon"></i> Refresh Report
         						</div>
-        						<div class="ui small button">
-				          			Approve
-        						</div>
-        						<div class="ui small disabled button">
-			          				Approve All
-        						</div>
+
+        						
       						</th>
     					</tr>
   					</tfoot>
 				</table>
+				</div>
 				)
 	}
 }

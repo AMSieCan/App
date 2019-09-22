@@ -68,9 +68,14 @@ class ScheduleVisit extends React.Component {
    const word = this.state.binInfo.map(bin=>{
     if(bin.name == name) {
         if(bin.setSchedule) {
-          return  "Scheduled"
+          return  (
+            <span className="ui red button">Unschedule</span>
+            )
+
         } else {
-          return "Schedule Visit?"
+          return (
+                <span className="ui blue button">Schedule Visit?</span>
+                )
         }
     }
    })
@@ -86,7 +91,7 @@ class ScheduleVisit extends React.Component {
     return(
 
       <div>
-        <button onClick={()=>{this.handleClick(this.props.binname)}}>{this.visit(this.props.binname)}</button>
+        <button className="buttonSchedule" onClick={()=>{this.handleClick(this.props.binname)}}>{this.visit(this.props.binname)}</button>
         <div></div>
       </div>
       )
