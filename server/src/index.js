@@ -70,7 +70,8 @@ app.post('/devices', async (req, res) => {
   try {
     // Validate serial number and location
     const { serialNumber, locationDescription } = req.body;
-    if (!serialNumber) {
+    var serialFormat = /^([0-9a-z]){24}$/i; // alphanumeric, length 24, case insensitive
+    if (!serialNumber || !serialNumber.match(serialFormat)) {
       return res.status(400).send({ message: 'Serial number is not valid!' });
     }
     if (!locationDescription) {
