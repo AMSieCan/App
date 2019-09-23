@@ -9,23 +9,25 @@ const MainLayout = ({ children, history, advanced = true }) => {
       <div>
         <Menu color="blue" inverted className="no-border">
           <Menu.Item>
+            <Link to="/institutions/:id">
             <i class="trash icon" style={{ color: 'white' }}></i> AMSie Can
+            </Link>
           </Menu.Item>
           {advanced && (
             <>
-              <Link to="/">
+              <Link to="/institutions/:id">
                 <Menu.Item name="Map" />
               </Link>
-              <Link to="/s">
+              <Link to="/institutions/:id/services">
                 <Menu.Item name="Service" />
               </Link>
-              <Link to="/devices">
+              <Link to="/institutions/:id/devices">
                 <Menu.Item name="Devices" />
               </Link>
-              <Link to="/users">
+              <Link to="/institutions/:id/users">
                 <Menu.Item name="Users" />
               </Link>
-              <Link to="/s2">
+              <Link to="/institutions/:id/s2">
                 <Menu.Item name="Help" />
               </Link>
             </>

@@ -44,7 +44,7 @@ export default () => {
     <MainLayout>
       <Switch>
         <Route path="/institutions/:id" exact component={MainDashboardPage} />
-        <Route path="/institutions/:services" exact component={ServicePage} />
+        <Route path="/institutions/:id/services" exact component={ServicePage} />
         <Route path="/institutions/:id/devices" exact component={DevicesPage} />
         <Route path="/institutions/:id/users" exact component={UsersPage} />
       </Switch>
