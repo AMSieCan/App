@@ -7,6 +7,7 @@ import user from './routes/user';
 import institution from './routes/institution';
 import device from './routes/device';
 import { serialNumber, locationDescription, addDevice } from './app/device';
+import { me } from './app/user';
 const app = express();
 db();
 
@@ -48,23 +49,44 @@ app.post('/devices', async (req, res) => {
   }
 });
 
+const isAuthenticated = async (req, res, next) => {
+  try {
+    if (req.headers.authorization && req.headers.authorization.includes('Bearer ')) {
+      const accessToken = req.headers.authorization.replace('Bearer ', '');
+      const userData = await me(accessToken);
+      if (userData) {
+        req.user = userData;
+        return next();
+      }
+    }
+    return res.status(500).send({ message: 'Unauthenticated' });
+  } catch (err) {
+    return res.status(500).send({ message: 'Unauthenticated' });
+  }
+};
+
 // Users
-app.get('/users/me', user.me);
+app.get('/users/me', isAuthenticated, user.me);
 app.post('/users', user.signUp);
 app.post('/users/login', user.login);
-app.delete('/users/:id', user.delete);
-app.put('/users/:id', user.patch);
+app.delete('/users/:id', isAuthenticated, user.delete);
+app.put('/users/:id', isAuthenticated, user.patch);
 
 // Institution
-app.get('/institutions/:id', institution.get);
-app.post('/institutions', institution.create);
-app.delete('/institutions/:id', institution.delete);
-app.put('/institutions/:id', institution.patch);
-app.get('/institutions', institution.list);
+app.get('/institutions/:id', isAuthenticated, institution.get);
+app.post('/institutions', isAuthenticated, institution.create);
+app.delete('/institutions/:id', isAuthenticated, institution.delete);
+app.put('/institutions/:id', isAuthenticated, institution.patch);
+app.get('/institutions', isAuthenticated, institution.list);
+
+// Institute users
+app.post('/institutions/:id/users', isAuthenticated, institution.addUser);
+app.get('/institutions/:id/users', isAuthenticated, institution.listUser);
+app.delete('/institutions/:id/users/:institutionUserId', isAuthenticated, institution.deleteUser);
 
 // Device
-app.get('/devices/:id', device.get);
-app.post('/devices', device.create);
-app.delete('/devices/:id', device.delete);
-app.put('/devices/:id', device.patch);
-app.get('/devices', device.list);
+app.get('/devices/:id', isAuthenticated, device.get);
+app.post('/devices', isAuthenticated, device.create);
+app.delete('/devices/:id', isAuthenticated, device.delete);
+app.put('/devices/:id', isAuthenticated, device.patch);
+app.get('/devices', isAuthenticated, device.list);

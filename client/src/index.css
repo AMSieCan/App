@@ -45,3 +45,7 @@ code {
 .content {
   padding: 20px;
 }
+
+.selectable {
+  cursor: pointer;
+}

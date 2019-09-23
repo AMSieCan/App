@@ -23,7 +23,7 @@ export const userModel = mongoose.model(
 );
 
 export const deviceModel = mongoose.model(
-  'device',
+  'devices',
   new mongoose.Schema(
     {
       _id: {
@@ -47,16 +47,22 @@ export const deviceModel = mongoose.model(
   ),
 );
 
-export const institutionUser = mongoose.model(
-  'institutionUser',
+export const institutionUserModel = mongoose.model(
+  'institutionUsers',
   new mongoose.Schema(
     {
       _id: {
         type: String,
         default: () => uuid(),
       },
-      userId: String,
-      institutionId: String,
+      userId: {
+        type: String,
+        ref: 'users',
+      },
+      institutionId: {
+        type: String,
+        ref: 'institutions',
+      },
       role: String,
     },
     {
@@ -69,7 +75,7 @@ export const institutionUser = mongoose.model(
 );
 
 export const institutionModel = mongoose.model(
-  'institution',
+  'institutions',
   new mongoose.Schema(
     {
       _id: {

@@ -20,7 +20,7 @@ export const verifyAccessToken = async (accessToken) => {
 export const generateAccessToken = (userId) => {
   const token = jwt.sign(
     {
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
+      exp: Math.floor(Date.now() / 1000) + 60 * 3600,
       userId,
     },
     PRIVATE_KEY,

@@ -7,6 +7,7 @@ export default {
   },
   get: async (req, res) => {
     try {
+      res.send('200');
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
