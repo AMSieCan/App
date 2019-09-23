@@ -12,7 +12,6 @@ export const userModel = mongoose.model(
       },
       emailAddress: mongoose.SchemaTypes.Email,
       password: String,
-      role: String,
     },
     {
       timestamps: {
@@ -23,8 +22,8 @@ export const userModel = mongoose.model(
   ),
 );
 
-export const device = mongoose.model(
-  'device',
+export const deviceModel = mongoose.model(
+  'devices',
   new mongoose.Schema(
     {
       _id: {
@@ -38,6 +37,55 @@ export const device = mongoose.model(
       long: Number,
       status: Number,
       lastDescription: String,
+    },
+    {
+      timestamps: {
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+      },
+    },
+  ),
+);
+
+export const institutionUserModel = mongoose.model(
+  'institutionUsers',
+  new mongoose.Schema(
+    {
+      _id: {
+        type: String,
+        default: () => uuid(),
+      },
+      userId: {
+        type: String,
+        ref: 'users',
+      },
+      institutionId: {
+        type: String,
+        ref: 'institutions',
+      },
+      role: String,
+    },
+    {
+      timestamps: {
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+      },
+    },
+  ),
+);
+
+export const institutionModel = mongoose.model(
+  'institutions',
+  new mongoose.Schema(
+    {
+      _id: {
+        type: String,
+        default: () => uuid(),
+      },
+      name: String,
+      streetAddress: String,
+      city: String,
+      state: String,
     },
     {
       timestamps: {

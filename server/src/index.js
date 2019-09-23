@@ -3,9 +3,11 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import db from './db/db';
-import { loginUser, createUser, verifyAccessToken, me } from './app/user';
+import user from './routes/user';
+import institution from './routes/institution';
+import device from './routes/device';
 import { serialNumber, locationDescription, addDevice } from './app/device';
-import { device } from './model';
+import { me } from './app/user';
 const app = express();
 db();
 
@@ -24,46 +26,6 @@ app.get('/', (req, res) => {
 app.post('/webhook', (req, res) => {
   console.log(req.body);
   res.send('OK');
-});
-
-app.post('/login', async (req, res) => {
-  try {
-    // Validate email and password
-    const { emailAddress, password } = req.body;
-    if (!emailAddress) {
-      return res.status(400).send({ message: 'Email address is not valid' });
-    }
-    if (!password) {
-      return res.status(400).send({ message: 'Password is not valid' });
-    }
-
-    // Validate user
-    const token = await loginUser(emailAddress.toLowerCase(), password);
-
-    res.send(token);
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
-});
-
-app.post('/signup', async (req, res) => {
-  try {
-    // Validate email and password
-    const { emailAddress, password } = req.body;
-    if (!emailAddress) {
-      return res.status(400).send({ message: 'Email address is not valid' });
-    }
-    if (!password) {
-      return res.status(400).send({ message: 'Password is not valid' });
-    }
-
-    // Validate user
-    const token = await createUser(emailAddress.toLowerCase(), password);
-
-    res.send(token);
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
 });
 
 app.post('/devices', async (req, res) => {
@@ -87,19 +49,44 @@ app.post('/devices', async (req, res) => {
   }
 });
 
-app.get('/me', async (req, res) => {
+const isAuthenticated = async (req, res, next) => {
   try {
-    // Check header for authorization
     if (req.headers.authorization && req.headers.authorization.includes('Bearer ')) {
       const accessToken = req.headers.authorization.replace('Bearer ', '');
       const userData = await me(accessToken);
       if (userData) {
-        return res.send(userData);
+        req.user = userData;
+        return next();
       }
     }
-
-    throw new Error('User not found.');
+    return res.status(500).send({ message: 'Unauthenticated' });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    return res.status(500).send({ message: 'Unauthenticated' });
   }
-});
+};
+
+// Users
+app.get('/users/me', isAuthenticated, user.me);
+app.post('/users', user.signUp);
+app.post('/users/login', user.login);
+app.delete('/users/:id', isAuthenticated, user.delete);
+app.put('/users/:id', isAuthenticated, user.patch);
+
+// Institution
+app.get('/institutions/:id', isAuthenticated, institution.get);
+app.post('/institutions', isAuthenticated, institution.create);
+app.delete('/institutions/:id', isAuthenticated, institution.delete);
+app.put('/institutions/:id', isAuthenticated, institution.patch);
+app.get('/institutions', isAuthenticated, institution.list);
+
+// Institute users
+app.post('/institutions/:id/users', isAuthenticated, institution.addUser);
+app.get('/institutions/:id/users', isAuthenticated, institution.listUser);
+app.delete('/institutions/:id/users/:institutionUserId', isAuthenticated, institution.deleteUser);
+
+// Device
+app.get('/devices/:id', isAuthenticated, device.get);
+app.post('/devices', isAuthenticated, device.create);
+app.delete('/devices/:id', isAuthenticated, device.delete);
+app.put('/devices/:id', isAuthenticated, device.patch);
+app.get('/devices', isAuthenticated, device.list);
