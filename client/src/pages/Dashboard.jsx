@@ -8,6 +8,7 @@ import MainDashboardPage from './Dashboard/MainDashboardPage';
 import ServicePage from './Dashboard/ServicePage';
 import DevicesPage from './Dashboard/DevicesPage';
 import UsersPage from './Dashboard/UsersPage';
+import InstitutionsPage from './InstitutionsPage';
 
 export default () => {
   const [user, setUser] = useState();
@@ -16,7 +17,7 @@ export default () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await Axios.get(`${enviroment.API_URL}/me`, {
+        const result = await Axios.get(`${enviroment.API_URL}/users/me`, {
           headers: {
             Authorization: `Bearer ${Cookies.get('accessToken')}`,
           },
@@ -39,18 +40,13 @@ export default () => {
     return <Redirect to="/login" />;
   }
 
-  if (user.role !== 'ADMIN') {
-    alert('Missing admin role');
-    return <Redirect to="/login" />;
-  }
   return (
     <MainLayout>
       <Switch>
-        <Route path="/" exact component={MainDashboardPage} />
-        <Route path="/s" exact component={ServicePage} />
-        <Route path="/s1" exact component={MainDashboardPage} />
-        <Route path="/devices" exact component={DevicesPage} />
-        <Route path="/users" exact component={UsersPage} />
+        <Route path="/institutions/:id" exact component={MainDashboardPage} />
+        <Route path="/institutions/:services" exact component={ServicePage} />
+        <Route path="/institutions/:id/devices" exact component={DevicesPage} />
+        <Route path="/institutions/:id/users" exact component={UsersPage} />
       </Switch>
     </MainLayout>
   );

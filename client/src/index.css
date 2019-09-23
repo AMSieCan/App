@@ -4,8 +4,7 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-overflow: hidden;
-	
+  overflow: hidden;
 }
 
 code {
@@ -31,11 +30,18 @@ code {
   color: darkviolet;
 }
 
-
 .animate {
- animation: pulse 2s infinite;
+  animation: pulse 2s infinite;
 }
 
 .unitInfo {
   margin: 50px;
+}
+
+.no-border {
+  border-radius: 0px !important;
+}
+
+.content {
+  padding: 20px;
 }

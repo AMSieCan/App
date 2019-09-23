@@ -19,7 +19,7 @@ export default ({ history }) => {
           onSubmit={async () => {
             try {
               setErrorMessage('');
-              const result = await axios.post(`${Enviroment.API_URL}/login`, {
+              const result = await axios.post(`${Enviroment.API_URL}/users/login`, {
                 emailAddress,
                 password,
               });
