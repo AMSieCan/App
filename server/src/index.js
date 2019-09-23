@@ -3,9 +3,10 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import db from './db/db';
-import { loginUser, createUser, verifyAccessToken, me } from './app/user';
+import user from './routes/user';
+import institution from './routes/institution';
+import device from './routes/device';
 import { serialNumber, locationDescription, addDevice } from './app/device';
-import { device } from './model';
 const app = express();
 db();
 
@@ -24,46 +25,6 @@ app.get('/', (req, res) => {
 app.post('/webhook', (req, res) => {
   console.log(req.body);
   res.send('OK');
-});
-
-app.post('/login', async (req, res) => {
-  try {
-    // Validate email and password
-    const { emailAddress, password } = req.body;
-    if (!emailAddress) {
-      return res.status(400).send({ message: 'Email address is not valid' });
-    }
-    if (!password) {
-      return res.status(400).send({ message: 'Password is not valid' });
-    }
-
-    // Validate user
-    const token = await loginUser(emailAddress.toLowerCase(), password);
-
-    res.send(token);
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
-});
-
-app.post('/signup', async (req, res) => {
-  try {
-    // Validate email and password
-    const { emailAddress, password } = req.body;
-    if (!emailAddress) {
-      return res.status(400).send({ message: 'Email address is not valid' });
-    }
-    if (!password) {
-      return res.status(400).send({ message: 'Password is not valid' });
-    }
-
-    // Validate user
-    const token = await createUser(emailAddress.toLowerCase(), password);
-
-    res.send(token);
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
 });
 
 app.post('/devices', async (req, res) => {
@@ -87,19 +48,23 @@ app.post('/devices', async (req, res) => {
   }
 });
 
-app.get('/me', async (req, res) => {
-  try {
-    // Check header for authorization
-    if (req.headers.authorization && req.headers.authorization.includes('Bearer ')) {
-      const accessToken = req.headers.authorization.replace('Bearer ', '');
-      const userData = await me(accessToken);
-      if (userData) {
-        return res.send(userData);
-      }
-    }
+// Users
+app.get('/users/me', user.me);
+app.post('/users', user.signUp);
+app.post('/users/login', user.login);
+app.delete('/users/:id', user.delete);
+app.put('/users/:id', user.patch);
 
-    throw new Error('User not found.');
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
-});
+// Institution
+app.get('/institutions/:id', institution.get);
+app.post('/institutions', institution.create);
+app.delete('/institutions/:id', institution.delete);
+app.put('/institutions/:id', institution.patch);
+app.get('/institutions', institution.list);
+
+// Device
+app.get('/devices/:id', device.get);
+app.post('/devices', device.create);
+app.delete('/devices/:id', device.delete);
+app.put('/devices/:id', device.patch);
+app.get('/devices', device.list);
