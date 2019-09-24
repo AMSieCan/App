@@ -1,4 +1,4 @@
-import { institutionModel, institutionUserModel, userModel } from '../model';
+import { institutionModel, institutionUserModel, userModel, deviceModel } from '../model';
 
 const INSTITUTION_ROLE = {
   ADMIN: 'ADMIN',
@@ -198,6 +198,18 @@ export const deleteInstitutionUser = async (user, id, institutionUserId) => {
     }
 
     return 200;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const listInstitutionDevice = async (user, id) => {
+  try {
+    const devices = await deviceModel.find({
+      institutionId: id,
+    });
+
+    return devices;
   } catch (err) {
     throw err;
   }

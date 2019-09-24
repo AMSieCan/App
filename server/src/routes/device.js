@@ -1,6 +1,19 @@
+import { addDevice, deleteDevice } from '../app/device';
+
 export default {
   create: async (req, res) => {
+    const { name, serialNumber, locationDescription, lat, long, institutionId } = req.body;
     try {
+      const device = await addDevice({
+        name,
+        serialNumber,
+        locationDescription,
+        lat,
+        long,
+        institutionId,
+      });
+
+      res.status(200).send(device);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
@@ -26,6 +39,9 @@ export default {
   },
   delete: async (req, res) => {
     try {
+      const { id } = req.params;
+      await deleteDevice(id);
+      res.status(200).send('200');
     } catch (err) {
       res.status(500).send({ message: err.message });
     }

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import Drawer from 'react-motion-drawer';
-import DrawerInfo from '../../layouts/DrawerInfo.js'
-import binData from '../../binData'
-
-
+import DrawerInfo from '../../layouts/DrawerInfo.js';
+import Axios from 'axios';
+import Cookies from 'js-cookie';
+import Environment from '../../utils/environment.js';
 
 const Pointer = ({ onClick, name, status, location }) => {
   return (
@@ -16,15 +16,36 @@ const Pointer = ({ onClick, name, status, location }) => {
         style={{ top: '-77px', left: '-77px' }}
         className="fade show popover bs-popover-top p-2"
       >
-        <i className="circular trash icon big animate" ></i>
+        <i className="circular trash icon big animate"></i>
         <span>{name}</span>
       </div>
     </div>
   );
 };
 
-export default () => {
+export default ({ match }) => {
+  const institutionId = match.params.id;
   const [bin, setBin] = useState(undefined);
+  const [devices, setDevices] = useState([]);
+
+  // Get devices
+  useEffect(() => {
+    const getDevices = async () => {
+      const result = await Axios.get(
+        `${Environment.API_URL}/institutions/${institutionId}/devices`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('accessToken')}`,
+          },
+        },
+      );
+      if (result.data) {
+        setDevices(result.data);
+      }
+    };
+    getDevices();
+  }, []);
+
   return (
     <div>
       <div className="googleMap">
@@ -36,17 +57,16 @@ export default () => {
           }}
           defaultZoom={19}
         >
-          <Pointer
-            name={binData[0].name}
-            status={binData[0].status}
-            onClick={(data) =>setBin(data)}
-            lat={binData[0].lat}
-            lng={binData[0].long}
-            location={binData[0].locationDescription}
-          />
-          <Pointer name={binData[1].name} status={binData[1].status} onClick={(data) => setBin(data)} lat={binData[1].lat} lng={binData[1].long} location={binData[1].locationDescription}/>
-          <Pointer name={binData[2].name} status={binData[2].status} onClick={(data) => setBin(data)} lat={binData[2].lat} lng={binData[2].long} location={binData[2].locationDescription}/>
-          <Pointer name={binData[3].name} status={binData[3].status} onClick={(data) => setBin(data)} lat={binData[3].lat} lng={binData[3].long} location={binData[3].locationDescription}/>
+          {devices.map((device) => (
+            <Pointer
+              name={device.name}
+              status={device.status}
+              onClick={(data) => setBin(data)}
+              lat={device.lat}
+              lng={device.long}
+              location={device.locationDescription}
+            />
+          ))}
         </GoogleMapReact>
       </div>
       <Drawer
@@ -59,17 +79,11 @@ export default () => {
           }
         }}
       >
-        {bin && 
-        <div>
-
-          <DrawerInfo 
-            binName = {bin.name}
-            binStatus = {bin.status}
-            binLocation = {bin.location}
-          />
-          
-          
-        </div>}
+        {bin && (
+          <div>
+            <DrawerInfo binName={bin.name} binStatus={bin.status} binLocation={bin.location} />
+          </div>
+        )}
       </Drawer>
     </div>
   );

@@ -4,30 +4,31 @@ import { Link, withRouter } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const MainLayout = ({ children, history, advanced = true }) => {
+  const institutionId = history.location.pathname.replace('/institutions', '').split('/')[1];
   return (
     <div>
       <div>
         <Menu color="blue" inverted className="no-border">
           <Menu.Item>
-            <Link to="/institutions/:id">
-            <i class="trash icon" style={{ color: 'white' }}></i> AMSie Can
+            <Link to={`/`}>
+              <i class="trash icon" style={{ color: 'white' }}></i> AMSie Can
             </Link>
           </Menu.Item>
           {advanced && (
             <>
-              <Link to="/institutions/:id">
+              <Link to={`/institutions/${institutionId}`}>
                 <Menu.Item name="Map" />
               </Link>
-              <Link to="/institutions/:id/services">
+              <Link to={`/institutions/${institutionId}/services`}>
                 <Menu.Item name="Service" />
               </Link>
-              <Link to="/institutions/:id/devices">
+              <Link to={`/institutions/${institutionId}/devices`}>
                 <Menu.Item name="Devices" />
               </Link>
-              <Link to="/institutions/:id/users">
+              <Link to={`/institutions/${institutionId}/users`}>
                 <Menu.Item name="Users" />
               </Link>
-              <Link to="/institutions/:id/s2">
+              <Link to={`/institutions/${institutionId}/help`}>
                 <Menu.Item name="Help" />
               </Link>
             </>

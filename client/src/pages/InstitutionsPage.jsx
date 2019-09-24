@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Environment from '../utils/enviroment';
+import Environment from '../utils/environment';
 import MainLayout from '../layouts/MainLayout';
 import axios from 'axios';
 import { Modal, Table, Button, Form, Input, Grid } from 'semantic-ui-react';
 import Cookies from 'js-cookie';
 import update from 'immutability-helper';
+import { Redirect } from 'react-router-dom';
 
 export default ({ history }) => {
   const [institutions, setInstitutions] = useState([]);
@@ -15,6 +16,27 @@ export default ({ history }) => {
     city: '',
     state: '',
   });
+
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const result = await axios.get(`${Environment.API_URL}/users/me`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('accessToken')}`,
+          },
+        });
+        setUser(result.data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        Cookies.remove('accessToken');
+      }
+    }
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
@@ -60,6 +82,15 @@ export default ({ history }) => {
       onCloseModal();
     }
   };
+
+  if (loading) {
+    return null;
+  }
+
+  if (!user) {
+    return <Redirect to="/login" />;
+  }
+
   return (
     <MainLayout advanced={false}>
       <div className="content">

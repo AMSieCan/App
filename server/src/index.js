@@ -28,26 +28,26 @@ app.post('/webhook', (req, res) => {
   res.send('OK');
 });
 
-app.post('/devices', async (req, res) => {
-  try {
-    // Validate serial number and location
-    const { serialNumber, locationDescription } = req.body;
-    var serialFormat = /^([0-9a-z]){24}$/i; // alphanumeric, length 24, case insensitive
-    if (!serialNumber || !serialNumber.match(serialFormat)) {
-      return res.status(400).send({ message: 'Serial number is not valid!' });
-    }
-    if (!locationDescription) {
-      return res.status(400).send({ message: 'You must enter a location description.' });
-    }
+// app.post('/devices', async (req, res) => {
+//   try {
+//     // Validate serial number and location
+//     const { serialNumber, locationDescription } = req.body;
+//     var serialFormat = /^([0-9a-z]){24}$/i; // alphanumeric, length 24, case insensitive
+//     if (!serialNumber || !serialNumber.match(serialFormat)) {
+//       return res.status(400).send({ message: 'Serial number is not valid!' });
+//     }
+//     if (!locationDescription) {
+//       return res.status(400).send({ message: 'You must enter a location description.' });
+//     }
 
-    // Validate device
-    const token = await addDevice(serialNumber.toLowerCase(), locationDescription);
+//     // Validate device
+//     const token = await addDevice(serialNumber.toLowerCase(), locationDescription);
 
-    res.send(token);
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
-});
+//     res.send(token);
+//   } catch (err) {
+//     res.status(500).send({ message: err.message });
+//   }
+// });
 
 const isAuthenticated = async (req, res, next) => {
   try {
@@ -79,14 +79,17 @@ app.delete('/institutions/:id', isAuthenticated, institution.delete);
 app.put('/institutions/:id', isAuthenticated, institution.patch);
 app.get('/institutions', isAuthenticated, institution.list);
 
-// Institute users
+// Institution users
 app.post('/institutions/:id/users', isAuthenticated, institution.addUser);
 app.get('/institutions/:id/users', isAuthenticated, institution.listUser);
 app.delete('/institutions/:id/users/:institutionUserId', isAuthenticated, institution.deleteUser);
+
+// Institution devices
+app.get('/institutions/:id/devices', isAuthenticated, institution.listDevice);
+
 
 // Device
 app.get('/devices/:id', isAuthenticated, device.get);
 app.post('/devices', isAuthenticated, device.create);
 app.delete('/devices/:id', isAuthenticated, device.delete);
 app.put('/devices/:id', isAuthenticated, device.patch);
-app.get('/devices', isAuthenticated, device.list);

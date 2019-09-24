@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import enviroment from '../utils/enviroment';
+import environment from '../utils/environment';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import MainLayout from '../layouts/MainLayout';
@@ -8,7 +8,6 @@ import MainDashboardPage from './Dashboard/MainDashboardPage';
 import ServicePage from './Dashboard/ServicePage';
 import DevicesPage from './Dashboard/DevicesPage';
 import UsersPage from './Dashboard/UsersPage';
-import InstitutionsPage from './InstitutionsPage';
 
 export default () => {
   const [user, setUser] = useState();
@@ -17,7 +16,7 @@ export default () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await Axios.get(`${enviroment.API_URL}/users/me`, {
+        const result = await Axios.get(`${environment.API_URL}/users/me`, {
           headers: {
             Authorization: `Bearer ${Cookies.get('accessToken')}`,
           },

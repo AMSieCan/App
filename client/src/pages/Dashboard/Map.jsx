@@ -14,7 +14,7 @@ const Pointer = ({ onClick, name, status, location }) => {
         style={{ top: '-77px', left: '-77px' }}
         className="fade show popover bs-popover-top p-2"
       >
-        <i className="circular trash icon big animate" ></i>
+        <i className="circular trashIcon icon big animate" ></i>
         <span>{name}</span>
       </div>
     </div>

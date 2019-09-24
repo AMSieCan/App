@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Enviroment from '../utils/enviroment';
+import Environment from '../utils/environment';
 import Cookies from 'js-cookie';
 
 export default ({ history }) => {
@@ -19,7 +19,7 @@ export default ({ history }) => {
           onSubmit={async () => {
             try {
               setErrorMessage('');
-              const result = await axios.post(`${Enviroment.API_URL}/users/login`, {
+              const result = await axios.post(`${Environment.API_URL}/users/login`, {
                 emailAddress,
                 password,
               });

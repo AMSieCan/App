@@ -4,6 +4,7 @@ import {
   createInstitution,
   patchInstitution,
   deleteInstitution,
+  listInstitutionDevice,
   listInstitutionUser,
   addInstitutionUser,
   deleteInstitutionUser,
@@ -84,6 +85,15 @@ export default {
       const { id, institutionUserId } = req.params;
       const res = await deleteInstitutionUser(req.user, id, institutionUserId);
       return res.send(res);
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  },
+  listDevice: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const devices = await listInstitutionDevice(req.user, id);
+      return res.send(devices);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }

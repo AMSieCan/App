@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Enviroment from '../../utils/enviroment';
+import Enviroment from '../../utils/environment';
 import Cookies from 'js-cookie';
 
 export default () => {

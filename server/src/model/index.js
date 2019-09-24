@@ -36,7 +36,11 @@ export const deviceModel = mongoose.model(
       lat: Number,
       long: Number,
       status: Number,
-      lastDescription: String,
+      institutionId: {
+        type: String,
+        ref: 'instititutions',
+      },
+      lastVisit: Date,
     },
     {
       timestamps: {
