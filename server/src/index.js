@@ -6,7 +6,6 @@ import db from './db/db';
 import user from './routes/user';
 import institution from './routes/institution';
 import device from './routes/device';
-import { serialNumber, locationDescription, addDevice } from './app/device';
 import { me } from './app/user';
 const app = express();
 db();
