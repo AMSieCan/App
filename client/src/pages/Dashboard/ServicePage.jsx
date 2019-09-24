@@ -28,7 +28,7 @@ export default () => {
   return (
   	<div className="ui grid">
       <div className="six wide column">
-    		<h1>hello</h1>
+    		
     		<ServiceRequest />
       </div>
       <div className="ten wide column">
