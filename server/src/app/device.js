@@ -1,13 +1,13 @@
-import { device } from '../model/index';
+import { deviceModel } from '../model/index';
 
 export const addDevice = async (serialNumber, locationDescription) => {
   try {
-    const serial = await device.findOne({ serialNumber });
+    const serial = await deviceModel.findOne({ serialNumber });
     if (serial) {
       throw new Error('Device is already registered.');
     }
 
-    const newDevice = await device.create({
+    const newDevice = await deviceModel.create({
       serialNumber,
       locationDescription,
     });

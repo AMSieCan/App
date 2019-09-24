@@ -23,7 +23,7 @@ export default ({ history }) => {
                 locationDescription,
               });
               Cookies.set('accessToken', result.data);
-              return history.push('/');
+              return history.push('/institutions/:id/services');
             } catch (err) {
               if (err.response) {
                 setErrorMessage(err.response.data.message);
