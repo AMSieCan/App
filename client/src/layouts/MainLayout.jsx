@@ -10,7 +10,7 @@ const MainLayout = ({ children, history, advanced = true }) => {
       <div>
         <Menu color="blue" inverted className="no-border">
           <Menu.Item>
-            <Link to={`/`}>
+            <Link to={`/institutions/${institutionId}`}>
               <i class="trash icon" style={{ color: 'white' }}></i> AMSie Can
             </Link>
           </Menu.Item>
