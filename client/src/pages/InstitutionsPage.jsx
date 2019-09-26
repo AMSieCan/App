@@ -6,7 +6,7 @@ import { Modal, Table, Button, Form, Input, Grid } from 'semantic-ui-react';
 import Cookies from 'js-cookie';
 import update from 'immutability-helper';
 import { Redirect } from 'react-router-dom';
-import EditInstitution from './EditInstitution'
+
 
 export default ({ history }) => {
   const [institutions, setInstitutions] = useState([]);
@@ -132,6 +132,25 @@ export default ({ history }) => {
   return (
     <MainLayout advanced={false}>
       <div className="content">
+
+      <h1>{
+
+            institutions.map(institution =>{
+              return(institution.name)
+            })
+
+
+          }
+          
+
+
+      </h1>
+
+
+
+
+
+
         <Table  striped>
           <Table.Header>
             <Table.Row>
@@ -168,7 +187,7 @@ export default ({ history }) => {
                   {institution.state}
                 </Table.Cell>
                 <Table.Cell>
-                  <button className="ui blue button" onClick={(e)=>{e.stopPropagation(); openEditInstitutionModal(true)}}>Edit</button>
+                  <button className="ui blue button" onClick={(e)=>{e.stopPropagation(); openEditInstitutionModal(institution); console.log(institution.name)}}>Edit</button>
                 </Table.Cell>
                 <Table.Cell collapsing></Table.Cell>
               </Table.Row>
@@ -287,8 +306,8 @@ export default ({ history }) => {
                       <Input className="action input"
 
                         type="text"
-                        defaultValue="rocky"
-                        // value={institutionForm.name}
+                        // defaultValue={editInstitutionModal.name}
+                        defaultValue={editInstitutionModal.name}
                         // placeholder="Rocky"
                         onChange={(e) =>
                           setInstitutionForm(
@@ -308,7 +327,8 @@ export default ({ history }) => {
                     <Form.Field>
                       <label>Street Address</label>
                       <Input
-                        value={institutionForm.streetAddress}
+
+                        defaultValue={editInstitutionModal.streetAddress}
                         onChange={(e) =>
                           setInstitutionForm(
                             update(institutionForm, {
@@ -325,7 +345,7 @@ export default ({ history }) => {
                     <Form.Field>
                       <label>City</label>
                       <Input
-                        value={institutionForm.city}
+                        defaultValue={editInstitutionModal.city}
                         onChange={(e) =>
                           setInstitutionForm(
                             update(institutionForm, {
@@ -342,7 +362,7 @@ export default ({ history }) => {
                     <Form.Field>
                       <label>State</label>
                       <Input
-                        value={institutionForm.state}
+                        defaultValue={editInstitutionModal.state}
                         onChange={(e) =>
                           setInstitutionForm(
                             update(institutionForm, {
@@ -363,7 +383,7 @@ export default ({ history }) => {
             <Button onClick={() => onCloseEditModal()} negative>
               Cancel
             </Button>
-            <Button onClick={() => onUpdateInstitution()} positive>
+            <Button onClick={() => onCreateInstitution()} positive>
               Create
             </Button>
           </Modal.Actions>
