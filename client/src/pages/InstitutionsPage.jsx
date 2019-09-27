@@ -11,6 +11,7 @@ export default ({ history }) => {
   const [institutions, setInstitutions] = useState([]);
   const [createInstitutionModal, setCreateInstitutionModal] = useState(false);
   const [editInstitutionModal, openEditInstitutionModal] = useState(undefined);
+  const [deleteInstitution, deleteInstitutionButton] = useState(undefined);
   const [institutionIndex, setInstitutionIndex] = useState(0);
   const [institutionForm, setInstitutionForm] = useState({
     name: '',
@@ -75,9 +76,36 @@ export default ({ history }) => {
     });
   };
 
+  const onDeleteInstitution = async () => {
+     console.log(deleteInstitution)
+    const res = await axios.delete(
+      `${Environment.API_URL}/institutions/${deleteInstitution}`,
+      {
+        ...institutionForm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
+        },
+      },
+    );
+
+    if (res.data) {
+      setInstitutions(
+        update(institutions, {
+          [institutionIndex]: {
+            $set: res.data,
+          },
+        }),
+      );
+      // onCloseEditModal();
+    }
+  };
+
+
 
   const onUpdateInstitution = async () => {
-    console.log(editInstitutionModal)
+    // console.log(editInstitutionModal)
     const res = await axios.put(
       `${Environment.API_URL}/institutions/${editInstitutionModal}`,
       {
@@ -180,6 +208,17 @@ export default ({ history }) => {
                     }}
                   >
                     Edit
+                  </button>
+
+                  <button
+                    className="ui red button"
+                    onClick={(e) => {onDeleteInstitution(institution._id);
+
+                      deleteInstitutionButton(institution._id)
+                    }}>
+                  
+                  
+                    Delete
                   </button>
                 </Table.Cell>
                 <Table.Cell collapsing></Table.Cell>
