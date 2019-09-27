@@ -75,7 +75,7 @@ export default ({ history }) => {
     });
   };
 
-  const onUpdateInstitution = async () => {
+  const onUpdateInstitution = async (inst) => {
     const res = await axios.post(
       `${Environment.API_URL}/institutions`,
       {
@@ -87,14 +87,29 @@ export default ({ history }) => {
         },
       },
     );
-    if (res.data) {
-      setInstitutions(
-        update(institutions, {
-          $push: [res.data],
-        }),
-      );
-      onCloseModal();
-    }
+
+   
+    console.log(institutionForm)  
+    console.log(inst) 
+
+    
+    setInstitutions(inst.map(instInfo =>{
+      if(instInfo._id == inst._id) {
+        // trying to do something like this
+        inst.name = institutionForm.name
+        console.log("hello")
+      }
+    }))
+    
+
+    // if (res.data) {
+    //   setInstitutions(
+    //     update(institutions, {
+    //       $push: [res.data],
+    //     }),
+    //   );
+    //   onCloseModal();
+    // }
   };
 
   const onCreateInstitution = async () => {
@@ -383,7 +398,7 @@ export default ({ history }) => {
             <Button onClick={() => onCloseEditModal()} negative>
               Cancel
             </Button>
-            <Button onClick={() => onCreateInstitution()} positive>
+            <Button onClick={() => onUpdateInstitution(editInstitutionModal)} positive>
               Create
             </Button>
           </Modal.Actions>
