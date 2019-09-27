@@ -7,6 +7,9 @@ import Cookies from 'js-cookie';
 import Environment from '../../utils/environment.js';
 
 const Pointer = ({ onClick, name, status, location }) => {
+  var color = 'green';
+  if (status > 80) color = 'red';                 // Determine the bin's CSS color.
+  else if (status > 50) color = 'orange';
   return (
     <div>
       <div
@@ -16,7 +19,7 @@ const Pointer = ({ onClick, name, status, location }) => {
         style={{ top: '-77px', left: '-77px' }}
         className="fade show popover bs-popover-top p-2"
       >
-        <i className="circular trash icon big animate"></i>
+        <i className="circular trash icon big animate" rel={color}></i>
         <span>{name}</span>
       </div>
     </div>

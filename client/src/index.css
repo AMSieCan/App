@@ -30,6 +30,10 @@ code {
   color: darkviolet;
 }
 
+.trash[rel="green"] { color: green; }
+.trash[rel="orange"] { color: orange; }
+.trash[rel="red"] { color: red; }
+
 .animate {
   animation: pulse 2s infinite;
 }
