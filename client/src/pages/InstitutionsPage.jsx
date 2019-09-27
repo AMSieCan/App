@@ -7,11 +7,11 @@ import Cookies from 'js-cookie';
 import update from 'immutability-helper';
 import { Redirect } from 'react-router-dom';
 
-
 export default ({ history }) => {
   const [institutions, setInstitutions] = useState([]);
   const [createInstitutionModal, setCreateInstitutionModal] = useState(false);
-  const [editInstitutionModal, openEditInstitutionModal] = useState(false);
+  const [editInstitutionModal, openEditInstitutionModal] = useState(undefined);
+  const [institutionIndex, setInstitutionIndex] = useState(0);
   const [institutionForm, setInstitutionForm] = useState({
     name: '',
     streetAddress: '',
@@ -64,9 +64,9 @@ export default ({ history }) => {
     });
   };
 
-
- const onCloseEditModal = () => {
-   openEditInstitutionModal(false);
+  const onCloseEditModal = () => {
+    openEditInstitutionModal(undefined);
+    setInstitutionIndex(0);
     setInstitutionForm({
       name: '',
       streetAddress: '',
@@ -75,9 +75,11 @@ export default ({ history }) => {
     });
   };
 
-  const onUpdateInstitution = async (inst) => {
-    const res = await axios.post(
-      `${Environment.API_URL}/institutions`,
+
+  const onUpdateInstitution = async () => {
+    console.log(editInstitutionModal)
+    const res = await axios.put(
+      `${Environment.API_URL}/institutions/${editInstitutionModal}`,
       {
         ...institutionForm,
       },
@@ -88,28 +90,16 @@ export default ({ history }) => {
       },
     );
 
-   
-    console.log(institutionForm)  
-    console.log(inst) 
-
-    
-    setInstitutions(inst.map(instInfo =>{
-      if(instInfo._id == inst._id) {
-        // trying to do something like this
-        inst.name = institutionForm.name
-        console.log("hello")
-      }
-    }))
-    
-
-    // if (res.data) {
-    //   setInstitutions(
-    //     update(institutions, {
-    //       $push: [res.data],
-    //     }),
-    //   );
-    //   onCloseModal();
-    // }
+    if (res.data) {
+      setInstitutions(
+        update(institutions, {
+          [institutionIndex]: {
+            $set: res.data,
+          },
+        }),
+      );
+      onCloseEditModal();
+    }
   };
 
   const onCreateInstitution = async () => {
@@ -142,37 +132,22 @@ export default ({ history }) => {
     return <Redirect to="/login" />;
   }
 
-
-
   return (
     <MainLayout advanced={false}>
       <div className="content">
+        <h1>
+          {institutions.map((institution) => {
+            return institution.name;
+          })}
+        </h1>
 
-      <h1>{
-
-            institutions.map(institution =>{
-              return(institution.name)
-            })
-
-
-          }
-          
-
-
-      </h1>
-
-
-
-
-
-
-        <Table  striped>
+        <Table striped>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell style={{width: '100px'}}>Institution</Table.HeaderCell>
-              <Table.HeaderCell style={{width: '75px'}}>Street Address</Table.HeaderCell>
-              <Table.HeaderCell style={{width: '20px'}}>City</Table.HeaderCell>
-              <Table.HeaderCell style={{width: '20px'}}>State</Table.HeaderCell>
+              <Table.HeaderCell style={{ width: '100px' }}>Institution</Table.HeaderCell>
+              <Table.HeaderCell style={{ width: '75px' }}>Street Address</Table.HeaderCell>
+              <Table.HeaderCell style={{ width: '20px' }}>City</Table.HeaderCell>
+              <Table.HeaderCell style={{ width: '20px' }}>State</Table.HeaderCell>
               <Table.HeaderCell collapsing>
                 <Button onClick={() => setCreateInstitutionModal(true)} primary size="small">
                   Create New
@@ -182,27 +157,30 @@ export default ({ history }) => {
           </Table.Header>
 
           <Table.Body>
-            {institutions.map((institution) => (
+            {institutions.map((institution, index) => (
               <Table.Row
                 className="selectable"
                 key={institution._id}
                 // onClick={() => {
                 //   history.push(`/institutions/${institution._id}`);
                 // }}
-
               >
                 <Table.Cell>{institution.name}</Table.Cell>
+                <Table.Cell>{institution.streetAddress}</Table.Cell>
+                <Table.Cell>{institution.city}</Table.Cell>
+                <Table.Cell>{institution.state}</Table.Cell>
                 <Table.Cell>
-                  {institution.streetAddress}
-                </Table.Cell>
-                <Table.Cell>
-                  {institution.city}
-                </Table.Cell>
-                <Table.Cell>
-                  {institution.state}
-                </Table.Cell>
-                <Table.Cell>
-                  <button className="ui blue button" onClick={(e)=>{e.stopPropagation(); openEditInstitutionModal(institution); console.log(institution.name)}}>Edit</button>
+                  <button
+                    className="ui blue button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEditInstitutionModal(institution._id);
+                      setInstitutionForm(institution);
+                      setInstitutionIndex(index);
+                    }}
+                  >
+                    Edit
+                  </button>
                 </Table.Cell>
                 <Table.Cell collapsing></Table.Cell>
               </Table.Row>
@@ -300,16 +278,7 @@ export default ({ history }) => {
           </Modal.Actions>
         </Modal>
 
-
-
-
-
-
-
-
-
-
-        <Modal open={editInstitutionModal} onClose={() => onCloseEditModal()}>
+        <Modal open={!!editInstitutionModal} onClose={() => onCloseEditModal()}>
           <Modal.Header>Edit Institution</Modal.Header>
           <Modal.Content>
             <Form>
@@ -318,11 +287,11 @@ export default ({ history }) => {
                   <Grid.Column>
                     <Form.Field>
                       <label>Name</label>
-                      <Input className="action input"
-
+                      <Input
+                        className="action input"
                         type="text"
                         // defaultValue={editInstitutionModal.name}
-                        defaultValue={editInstitutionModal.name}
+                        defaultValue={institutionForm.name}
                         // placeholder="Rocky"
                         onChange={(e) =>
                           setInstitutionForm(
@@ -342,8 +311,7 @@ export default ({ history }) => {
                     <Form.Field>
                       <label>Street Address</label>
                       <Input
-
-                        defaultValue={editInstitutionModal.streetAddress}
+                        defaultValue={institutionForm.streetAddress}
                         onChange={(e) =>
                           setInstitutionForm(
                             update(institutionForm, {
@@ -360,7 +328,7 @@ export default ({ history }) => {
                     <Form.Field>
                       <label>City</label>
                       <Input
-                        defaultValue={editInstitutionModal.city}
+                        defaultValue={institutionForm.city}
                         onChange={(e) =>
                           setInstitutionForm(
                             update(institutionForm, {
@@ -377,7 +345,7 @@ export default ({ history }) => {
                     <Form.Field>
                       <label>State</label>
                       <Input
-                        defaultValue={editInstitutionModal.state}
+                        defaultValue={institutionForm.state}
                         onChange={(e) =>
                           setInstitutionForm(
                             update(institutionForm, {
@@ -398,12 +366,12 @@ export default ({ history }) => {
             <Button onClick={() => onCloseEditModal()} negative>
               Cancel
             </Button>
-            <Button onClick={() => onUpdateInstitution(editInstitutionModal)} positive>
-              Create
+
+            <Button onClick={() => onUpdateInstitution()} positive>
+              Update
             </Button>
           </Modal.Actions>
         </Modal>
-
       </div>
     </MainLayout>
   );
