@@ -76,29 +76,18 @@ export default ({ history }) => {
     });
   };
 
-  const onDeleteInstitution = async () => {
+  const onDeleteInstitution = async (id) => {
      console.log(deleteInstitution)
     const res = await axios.delete(
-      `${Environment.API_URL}/institutions/${deleteInstitution}`,
-      {
-        ...institutionForm,
-      },
+      `${Environment.API_URL}/institutions/${id}`,
       {
         headers: {
           Authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
-      },
-    );
+      });
 
     if (res.data) {
-      setInstitutions(
-        update(institutions, {
-          [institutionIndex]: {
-            $set: res.data,
-          },
-        }),
-      );
-      // onCloseEditModal();
+      setInstitutions(institutions.filter((institution) => institution._id !== id));
     }
   };
 
