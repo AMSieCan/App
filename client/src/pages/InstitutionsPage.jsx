@@ -97,21 +97,16 @@ export default ({ history, match }) => {
   };
 
   const onDeleteInstitution = async (id) => {
-     console.log(deleteInstitution)
-    const res = await axios.delete(
-      `${Environment.API_URL}/institutions/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('accessToken')}`,
-        },
-      });
+    const res = await axios.delete(`${Environment.API_URL}/institutions/${id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('accessToken')}`,
+      },
+    });
 
     if (res.data) {
       setInstitutions(institutions.filter((institution) => institution._id !== id));
     }
   };
-
-
 
   const onUpdateInstitution = async () => {
     // console.log(editInstitutionModal)
@@ -191,6 +186,10 @@ export default ({ history, match }) => {
     return <Redirect to="/login" />;
   }
 
+  if (institutions && institutions.length > 0) {
+    return <Redirect to={`/institutions/${institutions[0]._id}`} />;
+  }
+
   return (
     <MainLayout advanced={false}>
       <div className="content">
@@ -222,9 +221,9 @@ export default ({ history, match }) => {
               <Table.Row
                 className="selectable"
                 key={institution._id}
-                // onClick={() => {
-                //   history.push(`/institutions/${institution._id}`);
-                // }}
+                onClick={() => {
+                  history.push(`/institutions/${institution._id}`);
+                }}
               >
                 <Table.Cell>{institution.name}</Table.Cell>
                 <Table.Cell>{institution.streetAddress}</Table.Cell>
@@ -247,12 +246,12 @@ export default ({ history, match }) => {
 
                   <button
                     className="ui red button"
-                    onClick={(e) => {onDeleteInstitution(institution._id);
+                    onClick={(e) => {
+                      onDeleteInstitution(institution._id);
 
-                      deleteInstitutionButton(institution._id)
-                    }}>
-                  
-                  
+                      deleteInstitutionButton(institution._id);
+                    }}
+                  >
                     Delete
                   </button>
                 </Table.Cell>
