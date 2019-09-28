@@ -77,7 +77,6 @@ export default ({ history }) => {
   };
 
   const onDeleteInstitution = async (id) => {
-    console.log(deleteInstitution);
     const res = await axios.delete(`${Environment.API_URL}/institutions/${id}`, {
       headers: {
         Authorization: `Bearer ${Cookies.get('accessToken')}`,
@@ -143,6 +142,10 @@ export default ({ history }) => {
 
   if (!user) {
     return <Redirect to="/login" />;
+  }
+
+  if (institutions && institutions.length > 0) {
+    return <Redirect to={`/institutions/${institutions[0]._id}`} />;
   }
 
   return (
