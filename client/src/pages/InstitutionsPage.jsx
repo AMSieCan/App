@@ -7,8 +7,12 @@ import Cookies from 'js-cookie';
 import update from 'immutability-helper';
 import { Redirect } from 'react-router-dom';
 
-export default ({ history }) => {
+export default ({ history, match }) => {
+  const institutionId = match.params.id;
   const [institutions, setInstitutions] = useState([]);
+  const [devices, setDevices] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [createDeviceModal, setCreateDeviceModal] = useState(false);
   const [createInstitutionModal, setCreateInstitutionModal] = useState(false);
   const [editInstitutionModal, openEditInstitutionModal] = useState(undefined);
   const [deleteInstitution, deleteInstitutionButton] = useState(undefined);
@@ -18,6 +22,11 @@ export default ({ history }) => {
     streetAddress: '',
     city: '',
     state: '',
+  });
+
+  const [deviceForm, setDeviceForm] = useState({
+    lat: '',
+    long: '',
   });
 
   const [user, setUser] = useState();
@@ -61,8 +70,17 @@ export default ({ history }) => {
       name: '',
       streetAddress: '',
       city: '',
-      state: '',
+      state: ''
+      
     });
+
+    setCreateDeviceModal(false);
+    setDeviceForm({
+      lat: '',
+      long: ''
+    });
+
+
   };
 
   const onCloseEditModal = () => {
@@ -73,6 +91,8 @@ export default ({ history }) => {
       streetAddress: '',
       city: '',
       state: '',
+      lat: null,
+      long: null
     });
   };
 
@@ -139,6 +159,28 @@ export default ({ history }) => {
       );
       onCloseModal();
     }
+    try {
+      const result = await axios.post(
+        `${Environment.API_URL}/institutions/${institutionId}/devices`,
+        { ...deviceForm, institutionId },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('accessToken')}`,
+          },
+        },
+      );
+      console.log(devices.lat)
+      onCloseModal();
+      setDevices(
+        update(devices, {
+          $push: [result.data],
+        }),
+      );
+    } catch (err) {
+      setErrorMessage(err.response.data.message);
+    }
+
+
   };
 
   if (loading) {
@@ -165,6 +207,8 @@ export default ({ history }) => {
               <Table.HeaderCell style={{ width: '75px' }}>Street Address</Table.HeaderCell>
               <Table.HeaderCell style={{ width: '20px' }}>City</Table.HeaderCell>
               <Table.HeaderCell style={{ width: '20px' }}>State</Table.HeaderCell>
+              <Table.HeaderCell style={{ width: '20px' }}>Latitude</Table.HeaderCell>
+              <Table.HeaderCell style={{ width: '20px' }}>Longitude</Table.HeaderCell>
               <Table.HeaderCell collapsing>
                 <Button onClick={() => setCreateInstitutionModal(true)} primary size="small">
                   Create New
@@ -186,6 +230,8 @@ export default ({ history }) => {
                 <Table.Cell>{institution.streetAddress}</Table.Cell>
                 <Table.Cell>{institution.city}</Table.Cell>
                 <Table.Cell>{institution.state}</Table.Cell>
+                <Table.Cell>{devices.lat}</Table.Cell>
+                <Table.Cell>{devices.long}</Table.Cell>
                 <Table.Cell>
                   <button
                     className="ui blue button"
@@ -221,7 +267,7 @@ export default ({ history }) => {
           <Modal.Content>
             <Form>
               <Grid>
-                <Grid.Row columns="1">
+                <Grid.Row columns="3">
                   <Grid.Column>
                     <Form.Field>
                       <label>Name</label>
@@ -231,6 +277,40 @@ export default ({ history }) => {
                           setInstitutionForm(
                             update(institutionForm, {
                               name: {
+                                $set: e.target.value,
+                              },
+                            }),
+                          )
+                        }
+                      />
+                    </Form.Field>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Form.Field>
+                      <label>Latitude</label>
+                      <Input
+                        value={deviceForm.lat}
+                        onChange={(e) =>
+                          setDeviceForm(
+                            update(deviceForm, {
+                              lat: {
+                                $set: e.target.value,
+                              },
+                            }),
+                          )
+                        }
+                      />
+                    </Form.Field>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Form.Field>
+                      <label>Longitude</label>
+                      <Input
+                        value={deviceForm.long}
+                        onChange={(e) =>
+                          setDeviceForm(
+                            update(deviceForm, {
+                              long: {
                                 $set: e.target.value,
                               },
                             }),
