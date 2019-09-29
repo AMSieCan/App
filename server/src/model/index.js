@@ -99,3 +99,24 @@ export const institutionModel = mongoose.model(
     },
   ),
 );
+
+export const sensorDataModel = mongoose.model(
+  'sensors',
+  new mongoose.Schema(
+    {
+      _id: {
+        type: String,
+        default: () => uuid(),
+      },
+      description: String,
+      data: String,
+      deviceID: String,
+    },
+    {
+      timestamps: {
+        createdAt: 'createdAt', 
+        updatedAt: 'updatedAt',
+      },
+    },
+  )
+);

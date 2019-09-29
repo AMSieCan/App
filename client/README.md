@@ -1,3 +1,6 @@
+## Overview
+The following information is provided to help start the client services.  The client services are separate from the server, which run on a different port all together.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -18,17 +18,19 @@ server.listen({ port: 8000 }, () => {
   console.log(`Server ready at 8000`);
 });
 
-app.get('/', (req, res) => {
-  res.send('hello world');
-});
+//app.get('/', (req, res) => {
+  //res.send('hello world');
+//});
 
 app.post('/webhook', (req, res) => {
-  console.log(req.body);
   res.send('OK');
 });
 
-// app.post('/devices', async (req, res) => {
-//   try {
+//app.post('/devices', async (req, res) => {
+  //console.log(req.body);
+  //res.send('OK');
+
+  //   try {
 //     // Validate serial number and location
 //     const { serialNumber, locationDescription } = req.body;
 //     var serialFormat = /^([0-9a-z]){24}$/i; // alphanumeric, length 24, case insensitive
@@ -46,7 +48,7 @@ app.post('/webhook', (req, res) => {
 //   } catch (err) {
 //     res.status(500).send({ message: err.message });
 //   }
-// });
+//});
 
 const isAuthenticated = async (req, res, next) => {
   try {
