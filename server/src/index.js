@@ -6,7 +6,9 @@ import db from './db/db';
 import user from './routes/user';
 import institution from './routes/institution';
 import device from './routes/device';
+import sensor from './routes/sensor';
 import { me } from './app/user';
+import { putData } from './app/sensor';
 const app = express();
 db();
 
@@ -16,14 +18,32 @@ const server = http.createServer(app);
 
 server.listen({ port: 8000 }, () => {
   console.log(`Server ready at 8000`);
-});
+});  
 
 //app.get('/', (req, res) => {
   //res.send('hello world');
 //});
 
-app.post('/webhook', (req, res) => {
-  res.send('OK');
+app.post('/sensor', async (req, res) => {
+  console.log("Received post request with "+Object.keys(req.body).length+" members included in the body..");
+  //console.log(req.body.event); //data type
+  //console.log(req.body.data); // data value
+  //console.log(req.body.coreid); // device
+  //console.log(req.body.published_at); // date published
+  //console.log(req.body); // complete body of the particle.io webhook api
+
+  try {
+    // Parse body of the post request for explicit tags which are provided by particle.io api
+    const description = req.body.event;
+    const data = req.body.data;
+    const deviceID = req.body.coreid;
+    const recordedAt = req.body.published_at;
+    const response = await putData(description, data, deviceID, recordedAt);
+    res.send(response);
+    console.log("Added data point");
+  } catch (err) {
+    res.status(500).send( { message: err.message } );
+  }
 });
 
 //app.post('/devices', async (req, res) => {
@@ -94,3 +114,7 @@ app.get('/devices/:id', isAuthenticated, device.get);
 app.post('/devices', isAuthenticated, device.create);
 app.delete('/devices/:id', isAuthenticated, device.delete);
 app.put('/devices/:id', isAuthenticated, device.patch);
+
+// Sensors and data
+app.post('/sensor', sensor.create);
+app.delete('/sensor/:id', sensor.delete);

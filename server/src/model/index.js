@@ -111,6 +111,7 @@ export const sensorDataModel = mongoose.model(
       description: String,
       data: String,
       deviceID: String,
+      recordedAt: String,
     },
     {
       timestamps: {
