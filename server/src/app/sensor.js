@@ -12,8 +12,8 @@ export const putData = async ({
     var serialNumber = deviceID;
     const serial = await deviceModel.findOne({ serialNumber });
     if (!serial) {
-    //  throw new Error('Device is already registered.');
-      console.log("Device not found in list!  See Admin to add the device first before sending data");
+      //  throw new Error('Device is already registered.');
+      throw new Error("Device not found in list!  See Admin to add the device first before sending data");
     }
     const newData = await deviceModel.create({
       description,

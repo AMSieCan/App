@@ -108,10 +108,10 @@ export const sensorDataModel = mongoose.model(
         type: String,
         default: () => uuid(),
       },
-      description: String,
-      data: String,
+      description: String, // Data type descriptor e.g. distance, count, error
+      data: String, // Actual data e.g. 10
       deviceID: String,
-      recordedAt: String,
+      recordedAt: String, // Time from device
     },
     {
       timestamps: {
