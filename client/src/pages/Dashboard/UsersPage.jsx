@@ -98,6 +98,7 @@ export default ({ history, match }) => {
           <Table.Row>
             <Table.HeaderCell>User</Table.HeaderCell>
             <Table.HeaderCell>Role</Table.HeaderCell>
+            <Table.HeaderCell textAlign="right">Edit</Table.HeaderCell>
             <Table.HeaderCell textAlign="right">Remove</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -113,6 +114,16 @@ export default ({ history, match }) => {
             >
               <Table.Cell>{user.emailAddress}</Table.Cell>
               <Table.Cell>{user.role}</Table.Cell>
+              <Table.Cell textAlign="right">
+                <Button
+                  color="orange"
+                  icon="edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    //onDeleteUser(user._id);
+                  }}
+                ></Button>
+              </Table.Cell>
               <Table.Cell textAlign="right">
                 <Button
                   color="red"
@@ -156,7 +167,7 @@ export default ({ history, match }) => {
                   <Form.Field>
                     <label>Role</label>
                     <Select
-                      options={[{ text: 'USER', value: 'USER' }, { text: 'ADMIN', value: 'ADMIN' }]}
+                      options={[{ key: 'USER', text: 'USER', value: 'USER' }, { key: 'ADMIN', text: 'ADMIN', value: 'ADMIN' }]}
                       //value={userForm.role}
                       defaultValue='USER'
                       onChange={(e) =>
