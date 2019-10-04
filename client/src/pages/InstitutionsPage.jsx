@@ -10,9 +10,7 @@ import { Redirect } from 'react-router-dom';
 export default ({ history, match }) => {
   const institutionId = match.params.id;
   const [institutions, setInstitutions] = useState([]);
-  const [devices, setDevices] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [createDeviceModal, setCreateDeviceModal] = useState(false);
   const [createInstitutionModal, setCreateInstitutionModal] = useState(false);
   const [editInstitutionModal, openEditInstitutionModal] = useState(undefined);
   const [deleteInstitution, deleteInstitutionButton] = useState(undefined);
@@ -22,9 +20,6 @@ export default ({ history, match }) => {
     streetAddress: '',
     city: '',
     state: '',
-  });
-
-  const [deviceForm, setDeviceForm] = useState({
     lat: '',
     long: '',
   });
@@ -70,17 +65,10 @@ export default ({ history, match }) => {
       name: '',
       streetAddress: '',
       city: '',
-      state: ''
-      
-    });
-
-    setCreateDeviceModal(false);
-    setDeviceForm({
+      state: '',
       lat: '',
-      long: ''
+      long: '',
     });
-
-
   };
 
   const onCloseEditModal = () => {
@@ -91,8 +79,8 @@ export default ({ history, match }) => {
       streetAddress: '',
       city: '',
       state: '',
-      lat: null,
-      long: null
+      lat: '',
+      long: '',
     });
   };
 
@@ -154,28 +142,6 @@ export default ({ history, match }) => {
       );
       onCloseModal();
     }
-    try {
-      const result = await axios.post(
-        `${Environment.API_URL}/institutions/${institutionId}/devices`,
-        { ...deviceForm, institutionId },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('accessToken')}`,
-          },
-        },
-      );
-      console.log(devices.lat)
-      onCloseModal();
-      setDevices(
-        update(devices, {
-          $push: [result.data],
-        }),
-      );
-    } catch (err) {
-      setErrorMessage(err.response.data.message);
-    }
-
-
   };
 
   if (loading) {
@@ -229,8 +195,8 @@ export default ({ history, match }) => {
                 <Table.Cell>{institution.streetAddress}</Table.Cell>
                 <Table.Cell>{institution.city}</Table.Cell>
                 <Table.Cell>{institution.state}</Table.Cell>
-                <Table.Cell>{devices.lat}</Table.Cell>
-                <Table.Cell>{devices.long}</Table.Cell>
+                <Table.Cell>{institution.lat}</Table.Cell>
+                <Table.Cell>{institution.long}</Table.Cell>
                 <Table.Cell>
                   <button
                     className="ui blue button"
@@ -288,10 +254,10 @@ export default ({ history, match }) => {
                     <Form.Field>
                       <label>Latitude</label>
                       <Input
-                        value={deviceForm.lat}
+                        value={institutionForm.lat}
                         onChange={(e) =>
-                          setDeviceForm(
-                            update(deviceForm, {
+                          setInstitutionForm(
+                            update(institutionForm, {
                               lat: {
                                 $set: e.target.value,
                               },
@@ -305,10 +271,10 @@ export default ({ history, match }) => {
                     <Form.Field>
                       <label>Longitude</label>
                       <Input
-                        value={deviceForm.long}
+                        value={institutionForm.long}
                         onChange={(e) =>
-                          setDeviceForm(
-                            update(deviceForm, {
+                          setInstitutionForm(
+                            update(institutionForm, {
                               long: {
                                 $set: e.target.value,
                               },
