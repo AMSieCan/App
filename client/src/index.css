@@ -7,6 +7,16 @@ body {
   overflow: hidden;
 }
 
+.homepage {
+  width: auto ;
+  height: auto;
+  background: url(./graphicResources/map.png);
+  background-size: cover;
+  background-position: center;
+  font-family: Lato;
+  color: white;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

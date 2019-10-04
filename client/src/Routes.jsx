@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import InstitutionsPage from './pages/InstitutionsPage';
+import HomePage from './layouts/HomePage';
 
 export default () => {
   return (
@@ -12,6 +13,7 @@ export default () => {
         <Route path="/login" exact component={Login} />
         <Route path="/signup" exact component={SignUp} />
         <Route path="/" exact component={InstitutionsPage} />
+        <Route path="/homepage" exact component={HomePage} />
         <Route path="/institutions" component={Dashboard} />
       </Switch>
     </Router>
