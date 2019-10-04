@@ -12,9 +12,9 @@ import {
 
 export default {
   create: async (req, res) => {
-    const { name, streetAddress, city, state } = req.body;
+    const { name, streetAddress, city, state, lat, long } = req.body;
     try {
-      const institution = await createInstitution(req.user._id, name, streetAddress, city, state);
+      const institution = await createInstitution(req.user._id, name, streetAddress, city, state, lat, long);
       res.send(institution);
     } catch (err) {
       res.status(500).send({ message: err.message });
@@ -32,12 +32,14 @@ export default {
   patch: async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, streetAddress, city, state } = req.body;
+      const { name, streetAddress, city, state, lat, long } = req.body;
       const institution = await patchInstitution(req.user, id, {
         name,
         streetAddress,
         city,
         state,
+        lat,
+        long,
       });
       res.send(institution);
     } catch (err) {

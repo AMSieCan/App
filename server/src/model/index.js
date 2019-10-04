@@ -90,6 +90,8 @@ export const institutionModel = mongoose.model(
       streetAddress: String,
       city: String,
       state: String,
+      lat: Number,
+      long: Number,
     },
     {
       timestamps: {
