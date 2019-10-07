@@ -238,6 +238,18 @@ const HomepageLayout = () => (
               The device attaches to trash bins and can be customized. Sensors measure the volume of the
               the bin and sends data wirelessly to the AMSie Can web app.
             </p>
+            
+          </Grid.Column>
+          <Grid.Column floated='right' width={6}>
+
+          
+            <Image bordered rounded size='large' src={require('../graphicResources/binSideView.png')} />
+            
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={8}>
             <Header as='h3' style={{ fontSize: '2em' }}>
               THe AMSie Can web app
             </Header>
@@ -245,15 +257,16 @@ const HomepageLayout = () => (
               The web app is the interface that lets you see the status of bins. It allows you to
               see which bins are full and can automate when a can needs to be emptied. 
             </p>
+            
           </Grid.Column>
           <Grid.Column floated='right' width={6}>
 
           
-            <Image bordered rounded size='large' src={require('../graphicResources/map.png')} />
-            <br />
-            <Image bordered rounded size='large' src={require('../graphicResources/webshot.png')} />
+             <Image bordered rounded size='large' src={require('../graphicResources/webshot.png')} />
+            
           </Grid.Column>
         </Grid.Row>
+
         <Grid.Row>
           <Grid.Column textAlign='center'>
             
