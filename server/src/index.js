@@ -26,19 +26,14 @@ server.listen({ port: 8000 }, () => {
 
 app.post('/sensor', async (req, res) => {
   console.log("Received post request with "+Object.keys(req.body).length+" members included in the body..");
-  //console.log(req.body.event); //data type
-  //console.log(req.body.data); // data value
-  //console.log(req.body.coreid); // device
-  //console.log(req.body.published_at); // date published
-  //console.log(req.body); // complete body of the particle.io webhook api
 
   try {
     // Parse body of the post request for explicit tags which are provided by particle.io api
-    const description = req.body.event;
-    const data = req.body.data;
-    const serialNumber = req.body.coreid;
-    const recordedAt = req.body.published_at;
-    const response = await putData(description, data, serialNumber, recordedAt);
+    const description = req.body.event; //data type
+    const data = req.body.data; // data value
+    const deviceID = req.body.coreid; // serial number of device
+    const recordedAt = req.body.published_at; // date published
+    const response = await putData(description, data, deviceID, recordedAt);
     res.send(response);
     console.log("Added data point");
   } catch (err) {
@@ -107,7 +102,6 @@ app.delete('/institutions/:id/users/:institutionUserId', isAuthenticated, instit
 
 // Institution devices
 app.get('/institutions/:id/devices', isAuthenticated, institution.listDevice);
-
 
 // Device
 app.get('/devices/:id', isAuthenticated, device.get);

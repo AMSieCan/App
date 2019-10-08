@@ -238,9 +238,9 @@ export const listInstitutionDevice = async (user, id) => {
         .reduce(
           (prev, curr) => {
             if (curr.description === 'distance') {
-              prev.distance += curr.data;
+              prev.distance += parseFloat(curr.data);
             } else if (curr.description === 'count') {
-              prev.count += curr.data;
+              prev.count += parseFloat(curr.data);
             }
             return prev;
           },

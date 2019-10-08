@@ -28,7 +28,9 @@ export default {
   },
   get: async (req, res) => {
     try {
-      res.send('200');
+      const { sensorRequested } = req.params;
+      const sensorData = await lastData(sensorRequested);
+      res.send(sensorData);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
