@@ -2,13 +2,14 @@ import { putData, deleteData } from '../app/sensor';
 
 export default {
   create: async (req, res) => {
-    const { description, data, deviceID, recordedAt } = req.body;
+    const { description, data, deviceId, recordedAt, serialNumber } = req.body;
     try {
       const deviceData = await putData({
         description,
         data,
-        deviceID,
+        deviceId,
         recordedAt,
+        serialNumber
       });
       // Success adding device data
       res.status(200).send(deviceData);

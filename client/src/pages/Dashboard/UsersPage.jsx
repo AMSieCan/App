@@ -168,13 +168,13 @@ export default ({ history, match }) => {
                     <label>Role</label>
                     <Select
                       options={[{ key: 'USER', text: 'USER', value: 'USER' }, { key: 'ADMIN', text: 'ADMIN', value: 'ADMIN' }]}
-                      //value={userForm.role}
+                      value={userForm.role}
                       defaultValue='USER'
-                      onChange={(e) =>
+                      onChange={(e, data) =>
                         setUserForm(
                           update(userForm, {
                             role: {
-                              $set: e.target.value,
+                              $set: data.value,
                             },
                           }),
                         )

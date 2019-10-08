@@ -9,6 +9,7 @@ import ServicePage from './Dashboard/ServicePage';
 import DevicesPage from './Dashboard/DevicesPage';
 import UsersPage from './Dashboard/UsersPage';
 import SettingsPage from './Dashboard/SettingsPage';
+import DeviceDetailsPage from './Dashboard/DeviceDetailsPage';
 
 export default () => {
   const [user, setUser] = useState();
@@ -48,6 +49,7 @@ export default () => {
         <Route path="/institutions/:id/devices" exact component={DevicesPage} />
         <Route path="/institutions/:id/users" exact component={UsersPage} />
         <Route path="/institutions/:id/settings" exact component={SettingsPage} />
+        <Route path="/institutions/:id/devices/:deviceId" exact component={DeviceDetailsPage} />
       </Switch>
     </MainLayout>
   );

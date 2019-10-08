@@ -1,4 +1,4 @@
-import { addDevice, deleteDevice } from '../app/device';
+import { addDevice, deleteDevice, getDevice } from '../app/device';
 
 export default {
   create: async (req, res) => {
@@ -19,8 +19,10 @@ export default {
     }
   },
   get: async (req, res) => {
+    const { id } = req.params;
     try {
-      res.send('200');
+      const device = await getDevice(req.user, id);
+      res.send(device);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }

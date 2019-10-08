@@ -1,13 +1,6 @@
 import { deviceModel } from '../model/index';
 
-export const addDevice = async ({
-  name,
-  serialNumber,
-  locationDescription,
-  lat,
-  long,
-  institutionId,
-}) => {
+export const addDevice = async ({ name, locationDescription, lat, long, institutionId }) => {
   try {
     const serial = await deviceModel.findOne({ serialNumber });
     if (serial) {
@@ -40,6 +33,15 @@ export const deleteDevice = async (id) => {
     if (device.deletedCount === 0) {
       throw new Error('Failed to delete device');
     }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getDevice = async (user, id) => {
+  try {
+    const device = await deviceModel.findById({ _id: id });
+    return device;
   } catch (err) {
     throw err;
   }
