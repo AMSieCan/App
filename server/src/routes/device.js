@@ -1,4 +1,5 @@
 import { addDevice, deleteDevice, getDevice } from '../app/device';
+import { listSensors } from '../app/sensor';
 
 export default {
   create: async (req, res) => {
@@ -33,17 +34,20 @@ export default {
       res.status(500).send({ message: err.message });
     }
   },
-  list: async (req, res) => {
-    try {
-    } catch (err) {
-      res.status(500).send({ message: err.message });
-    }
-  },
   delete: async (req, res) => {
     try {
       const { id } = req.params;
       await deleteDevice(id);
       res.status(200).send('200');
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  },
+  getSensors: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const sensors = await listSensors({ deviceId: id });
+      res.status(200).send(sensors);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }

@@ -1,54 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Grid, Message, Table, Modal, Input, TextArea } from 'semantic-ui-react';
+import {
+  Button,
+  Form,
+  Grid,
+  Message,
+  Table,
+  Modal,
+  Input,
+  Select,
+} from 'semantic-ui-react';
 import Cookies from 'js-cookie';
 import Axios from 'axios';
 import update from 'immutability-helper';
 import Environment from '../../utils/environment';
 
 export default ({ history, match }) => {
-  const institutionId = match.params.id;
   const deviceId = match.params.deviceId;
   const [device, setDevice] = useState({});
-  const [devices, setDevices] = useState([]);
+  const [sensors, setSensors] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [createDeviceModal, setCreateDeviceModal] = useState(false);
-  const [deviceForm, setDeviceForm] = useState({
-    name: '',
+  const [createSensorModal, setCreateSensorModal] = useState(false);
+  const [sensorForm, setSensorForm] = useState({
+    description: '',
     serialNumber: '',
-    locationDescription: '',
-    lat: '',
-    long: '',
+    data: 0,
   });
 
   const onCloseModal = () => {
-    setCreateDeviceModal(false);
-    setDeviceForm({
-      name: '',
+    setCreateSensorModal(false);
+    setSensorForm({
+      description: '',
       serialNumber: '',
-      locationDescription: '',
-      lat: '',
-      long: '',
+      data: 0,
     });
   };
 
-  const onDeleteDevice = async (id) => {
+  const onDeleteSensor = async (id) => {
     try {
-      await Axios.delete(`${Environment.API_URL}/devices/${id}`, {
+      await Axios.delete(`${Environment.API_URL}/sensors/${id}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
       });
-      setDevices(devices.filter((d) => d._id !== id));
+      setSensors(sensors.filter((d) => d._id !== id));
     } catch (err) {
       alert(err.message);
     }
   };
 
-  const onCreateDevice = async () => {
+  const onCreateSensor = async () => {
     try {
       const result = await Axios.post(
-        `${Environment.API_URL}/devices`,
-        { ...deviceForm, institutionId },
+        `${Environment.API_URL}/sensors`,
+        { ...sensorForm, deviceId },
         {
           headers: {
             Authorization: `Bearer ${Cookies.get('accessToken')}`,
@@ -56,8 +60,8 @@ export default ({ history, match }) => {
         },
       );
       onCloseModal();
-      setDevices(
-        update(devices, {
+      setSensors(
+        update(sensors, {
           $push: [result.data],
         }),
       );
@@ -66,44 +70,38 @@ export default ({ history, match }) => {
     }
   };
 
-  // Get devices
+  // Get device
   useEffect(() => {
     const getDevice = async () => {
-      const result = await Axios.get(
-        `${Environment.API_URL}/devices/${deviceId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('accessToken')}`,
-          },
+      const result = await Axios.get(`${Environment.API_URL}/devices/${deviceId}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
-      );
+      });
       if (result.data) {
         setDevice(result.data);
       }
     };
-    const getDevices = async () => {
-      const result = await Axios.get(
-        `${Environment.API_URL}/institutions/${institutionId}/devices`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('accessToken')}`,
-          },
+    // get sensors
+    const getSensors = async () => {
+      const result = await Axios.get(`${Environment.API_URL}/devices/${deviceId}/sensors`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
-      );
+      });
       if (result.data) {
-        setDevices(result.data);
+        setSensors(result.data);
       }
     };
     getDevice();
+    getSensors();
   }, []);
-
-  console.log(device)
 
   return (
     <div className="content">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h1>Sensors for device {deviceId}</h1>
-        <Button onClick={() => setCreateDeviceModal(true)} primary size="small">
+        <h1>Sensors for device {device.name}</h1>
+        <Button onClick={() => setCreateSensorModal(true)} primary size="small">
           Create New
         </Button>
       </div>
@@ -112,34 +110,26 @@ export default ({ history, match }) => {
           <Table.Row>
             <Table.HeaderCell>Description</Table.HeaderCell>
             <Table.HeaderCell>Serial</Table.HeaderCell>
-            <Table.HeaderCell>Lat/Long</Table.HeaderCell>
-            <Table.HeaderCell>Description</Table.HeaderCell>
+            <Table.HeaderCell>Data</Table.HeaderCell>
+            <Table.HeaderCell>Recorded At</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
         <Table.Body>
-          {devices.map((device) => (
-            <Table.Row
-              className="selectable"
-              key={device._id}
-              onClick={() => {
-                history.push(`/institutions/${institutionId}/devices/${device._id}`);
-              }}
-            >
-              <Table.Cell>{device.name}</Table.Cell>
-              <Table.Cell>{device.serialNumber}</Table.Cell>
-              <Table.Cell>
-                {device.lat}/{device.long}
-              </Table.Cell>
-              <Table.Cell>{device.locationDescription}</Table.Cell>
+          {sensors.map((sensor) => (
+            <Table.Row key={sensor._id}>
+              <Table.Cell>{sensor.description}</Table.Cell>
+              <Table.Cell>{sensor.serialNumber}</Table.Cell>
+              <Table.Cell>{sensor.data}</Table.Cell>
+              <Table.Cell>{sensor.recordedAt}</Table.Cell>
               <Table.Cell textAlign="right">
                 <Button
                   color="red"
                   icon="trash"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDeleteDevice(device._id);
+                    onDeleteSensor(sensor._id);
                   }}
                 ></Button>
               </Table.Cell>
@@ -148,23 +138,28 @@ export default ({ history, match }) => {
         </Table.Body>
       </Table>
 
-      <Modal open={createDeviceModal} onClose={() => onCloseModal()}>
-        <Modal.Header>Create a device</Modal.Header>
+      <Modal open={createSensorModal} onClose={() => onCloseModal()}>
+        <Modal.Header>Add a sensor</Modal.Header>
         <Modal.Content>
           {errorMessage && <Message negative>{errorMessage}</Message>}
           <Form>
             <Grid>
-              <Grid.Row columns="2">
+              <Grid.Row columns="3">
                 <Grid.Column>
                   <Form.Field>
-                    <label>Name</label>
-                    <Input
-                      value={deviceForm.name}
-                      onChange={(e) =>
-                        setDeviceForm(
-                          update(deviceForm, {
-                            name: {
-                              $set: e.target.value,
+                    <label>Description</label>
+                    <Select
+                      options={[
+                        { key: 'distance', text: 'Distance', value: 'distance' },
+                        { key: 'count', text: 'Count', value: 'count' },
+                      ]}
+                      value={sensorForm.description}
+                      defaultValue="distance"
+                      onChange={(e, data) =>
+                        setSensorForm(
+                          update(sensorForm, {
+                            description: {
+                              $set: data.value,
                             },
                           }),
                         )
@@ -176,10 +171,10 @@ export default ({ history, match }) => {
                   <Form.Field>
                     <label>Serial Number</label>
                     <Input
-                      value={deviceForm.serialNumber}
+                      value={sensorForm.serialNumber}
                       onChange={(e) =>
-                        setDeviceForm(
-                          update(deviceForm, {
+                        setSensorForm(
+                          update(sensorForm, {
                             serialNumber: {
                               $set: e.target.value,
                             },
@@ -189,55 +184,15 @@ export default ({ history, match }) => {
                     />
                   </Form.Field>
                 </Grid.Column>
-              </Grid.Row>
-
-              <Grid.Row columns="2">
                 <Grid.Column>
                   <Form.Field>
-                    <label>Lat</label>
+                    <label>Data</label>
                     <Input
-                      value={deviceForm.lat}
+                      value={sensorForm.data}
                       onChange={(e) =>
-                        setDeviceForm(
-                          update(deviceForm, {
-                            lat: {
-                              $set: e.target.value,
-                            },
-                          }),
-                        )
-                      }
-                    />
-                  </Form.Field>
-                </Grid.Column>
-                <Grid.Column>
-                  <Form.Field>
-                    <label>Long</label>
-                    <Input
-                      value={deviceForm.long}
-                      onChange={(e) =>
-                        setDeviceForm(
-                          update(deviceForm, {
-                            long: {
-                              $set: e.target.value,
-                            },
-                          }),
-                        )
-                      }
-                    />
-                  </Form.Field>
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row columns="1">
-                <Grid.Column>
-                  <Form.Field>
-                    <label>Description</label>
-                    <TextArea
-                      rows={4}
-                      value={deviceForm.locationDescription}
-                      onChange={(e) =>
-                        setDeviceForm(
-                          update(deviceForm, {
-                            locationDescription: {
+                        setSensorForm(
+                          update(sensorForm, {
+                            data: {
                               $set: e.target.value,
                             },
                           }),
@@ -254,7 +209,7 @@ export default ({ history, match }) => {
           <Button onClick={() => onCloseModal()} negative>
             Cancel
           </Button>
-          <Button onClick={() => onCreateDevice()} positive>
+          <Button onClick={() => onCreateSensor()} positive>
             Create
           </Button>
         </Modal.Actions>

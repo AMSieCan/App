@@ -36,9 +36,9 @@ app.post('/sensor', async (req, res) => {
     // Parse body of the post request for explicit tags which are provided by particle.io api
     const description = req.body.event;
     const data = req.body.data;
-    const deviceID = req.body.coreid;
+    const serialNumber = req.body.coreid;
     const recordedAt = req.body.published_at;
-    const response = await putData(description, data, deviceID, recordedAt);
+    const response = await putData(description, data, serialNumber, recordedAt);
     res.send(response);
     console.log("Added data point");
   } catch (err) {
@@ -114,7 +114,10 @@ app.get('/devices/:id', isAuthenticated, device.get);
 app.post('/devices', isAuthenticated, device.create);
 app.delete('/devices/:id', isAuthenticated, device.delete);
 app.put('/devices/:id', isAuthenticated, device.patch);
+app.get('/devices/:id/sensors', isAuthenticated, device.getSensors);
 
 // Sensors and data
-app.post('/sensor', sensor.create);
-app.delete('/sensor/:id', sensor.delete);
+app.post('/sensors', sensor.create);
+app.put('/sensors/:id', sensor.patch);
+app.get('/sensors/:id', sensor.get);
+app.delete('/sensors/:id', sensor.delete);

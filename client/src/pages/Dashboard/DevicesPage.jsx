@@ -106,6 +106,8 @@ export default ({ history, match }) => {
             <Table.HeaderCell>Serial</Table.HeaderCell>
             <Table.HeaderCell>Lat/Long</Table.HeaderCell>
             <Table.HeaderCell>Description</Table.HeaderCell>
+            <Table.HeaderCell>Distance</Table.HeaderCell>
+            <Table.HeaderCell>Count</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -125,6 +127,8 @@ export default ({ history, match }) => {
                 {device.lat}/{device.long}
               </Table.Cell>
               <Table.Cell>{device.locationDescription}</Table.Cell>
+              <Table.Cell>{device.sensorData.distance}</Table.Cell>
+              <Table.Cell>{device.sensorData.count}</Table.Cell>
               <Table.Cell textAlign="right">
                 <Button
                   color="red"

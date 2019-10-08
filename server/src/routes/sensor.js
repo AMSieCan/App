@@ -1,18 +1,27 @@
-import { putData, deleteData } from '../app/sensor';
+import { deleteSensor, createSensor } from '../app/sensor';
 
 export default {
   create: async (req, res) => {
-    const { description, data, deviceId, recordedAt, serialNumber } = req.body;
+    const { description, data, deviceId, serialNumber } = req.body;
     try {
-      const deviceData = await putData({
+      if (!description) {
+        throw new Error('Missing description');
+      }
+      if (!serialNumber) {
+        throw new Error('Missing serialNumber');
+      }
+      if (!deviceId) {
+        throw new Error('Missing deviceId');
+      }
+      const sensor = await createSensor({
         description,
         data,
         deviceId,
-        recordedAt,
-        serialNumber
+        serialNumber,
+        recordedAt: new Date(),
       });
       // Success adding device data
-      res.status(200).send(deviceData);
+      res.status(200).send(sensor);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
@@ -39,7 +48,7 @@ export default {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
-      await deleteData(id);
+      await deleteSensor(id);
       res.status(200).send('200');
     } catch (err) {
       res.status(500).send({ message: err.message });

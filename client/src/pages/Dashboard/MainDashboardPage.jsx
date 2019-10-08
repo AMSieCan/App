@@ -83,8 +83,9 @@ export default ({ match }) => {
         >
           {devices.map((device) => (
             <Pointer
+              key={device._id}
               name={device.name}
-              status={device.status}
+              status={device.sensorData.distance}
               onClick={(data) => setBin(data)}
               lat={device.lat}
               lng={device.long}

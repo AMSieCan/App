@@ -1,4 +1,10 @@
-import { institutionModel, institutionUserModel, userModel, deviceModel } from '../model';
+import {
+  institutionModel,
+  institutionUserModel,
+  userModel,
+  deviceModel,
+  sensorDataModel,
+} from '../model';
 
 const INSTITUTION_ROLE = {
   ADMIN: 'ADMIN',
@@ -93,7 +99,11 @@ export const deleteInstitution = async (user, id) => {
   }
 };
 
-export const patchInstitution = async (user, id, { name, streetAddress, city, state, lat, long }) => {
+export const patchInstitution = async (
+  user,
+  id,
+  { name, streetAddress, city, state, lat, long },
+) => {
   try {
     // Check if user belong to this institution
     const instUser = await institutionUserModel
@@ -217,7 +227,28 @@ export const listInstitutionDevice = async (user, id) => {
       institutionId: id,
     });
 
-    return devices;
+    const deviceIds = devices.map((d) => d._id);
+
+    // Add device data
+    const sensors = await sensorDataModel.find({ deviceId: { $in: deviceIds } });
+
+    return devices.map((d) => {
+      let sensorData = sensors
+        .filter((s) => s.deviceId === d._id)
+        .reduce(
+          (prev, curr) => {
+            if (curr.description === 'distance') {
+              prev.distance += curr.data;
+            } else if (curr.description === 'count') {
+              prev.count += curr.data;
+            }
+            return prev;
+          },
+          { distance: 0, count: 0 },
+        );
+
+      return { ...d.toJSON(), sensorData };
+    });
   } catch (err) {
     throw err;
   }

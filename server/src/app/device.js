@@ -1,6 +1,6 @@
-import { deviceModel } from '../model/index';
+import { deviceModel, sensorDataModel } from '../model/index';
 
-export const addDevice = async ({ name, locationDescription, lat, long, institutionId }) => {
+export const addDevice = async ({ serialNumber, name, locationDescription, lat, long, institutionId }) => {
   try {
     const serial = await deviceModel.findOne({ serialNumber });
     if (serial) {
@@ -41,7 +41,21 @@ export const deleteDevice = async (id) => {
 export const getDevice = async (user, id) => {
   try {
     const device = await deviceModel.findById({ _id: id });
-    return device;
+
+    const sensors = await sensorDataModel.find({ deviceId: id });
+    let sensorData = sensors.reduce(
+      (prev, curr) => {
+        if (curr.description === 'distance') {
+          prev.distance += curr.data;
+        } else if (curr.description === 'count') {
+          prev.count += curr.data;
+        }
+        return prev;
+      },
+      { distance: 0, count: 0 },
+    );
+
+    return {...device.toJSON(), sensorData };
   } catch (err) {
     throw err;
   }

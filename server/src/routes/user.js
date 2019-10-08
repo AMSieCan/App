@@ -1,4 +1,4 @@
-import { loginUser, createUser, verifyAccessToken, me } from '../app/user';
+import { loginUser, createUser, me } from '../app/user';
 
 export default {
   me: async (req, res) => {
