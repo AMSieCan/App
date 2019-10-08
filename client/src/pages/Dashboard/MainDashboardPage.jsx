@@ -5,10 +5,12 @@ import DrawerInfo from '../../layouts/DrawerInfo.js';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import Environment from '../../utils/environment.js';
+import { Loader } from 'semantic-ui-react';
 
 const Pointer = ({ onClick, name, status, location }) => {
   var color = 'green';
-  if (status > 80) color = 'red';                 // Determine the bin's CSS color.
+  if (status > 80) color = 'red';
+  // Determine the bin's CSS color.
   else if (status > 50) color = 'orange';
   return (
     <div>
@@ -27,11 +29,13 @@ const Pointer = ({ onClick, name, status, location }) => {
 };
 
 export default ({ match }) => {
+  const [loading, setLoading] = useState(false);
+  const [institution, setInstitution] = useState(undefined);
   const institutionId = match.params.id;
   const [bin, setBin] = useState(undefined);
   const [devices, setDevices] = useState([]);
 
-  // Get devices
+  // Get devices and institution data
   useEffect(() => {
     const getDevices = async () => {
       const result = await Axios.get(
@@ -46,8 +50,25 @@ export default ({ match }) => {
         setDevices(result.data);
       }
     };
+    const getInstitutionData = async () => {
+      const result = await Axios.get(`${Environment.API_URL}/institutions/${institutionId}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
+        },
+      });
+      if (result.data) {
+        setInstitution(result.data);
+      }
+    };
+    getInstitutionData();
     getDevices();
+
+    setLoading(false);
   }, []);
+
+  if (loading || !institution) {
+    return <Loader />;
+  }
 
   return (
     <div>
@@ -55,8 +76,8 @@ export default ({ match }) => {
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyCBuMSPKaYOdjho5xbYDW6n_yjmSk_ZpRI' }}
           defaultCenter={{
-            lat: 36.653767,
-            lng: -121.79846,
+            lat: institution.lat,
+            lng: institution.long,
           }}
           defaultZoom={19}
         >
