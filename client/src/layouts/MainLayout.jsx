@@ -28,8 +28,8 @@ const MainLayout = ({ children, history, advanced = true }) => {
               <Link to={`/institutions/${institutionId}/users`}>
                 <Menu.Item name="Users" />
               </Link>
-              <Link to={`/institutions/${institutionId}/help`}>
-                <Menu.Item name="Help" />
+              <Link to={`/institutions/${institutionId}/settings`}>
+                <Menu.Item name="Settings" />
               </Link>
             </>
           )}
