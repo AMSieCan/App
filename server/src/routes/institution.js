@@ -85,8 +85,8 @@ export default {
   deleteUser: async (req, res) => {
     try {
       const { id, institutionUserId } = req.params;
-      const res = await deleteInstitutionUser(req.user, id, institutionUserId);
-      return res.send(res);
+      const result = await deleteInstitutionUser(req.user, id, institutionUserId);
+      return res.send(result);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
