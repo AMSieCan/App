@@ -1,9 +1,12 @@
-import { sensorDataModel } from '../model/index';
-import { deviceModel } from '../model/index';
+import { deviceModel } from '../model';
 
-export const putData = async ({ description, data, deviceId, recordedAt, serialNumber }) => {
+export const putData = async ({ // Device data is recorded into the model here
+  description,
+  data,
+  deviceID,
+  recordedAt,
+}) => {
   try {
-    // Todo: Verify device exists before creating a record
     var serialNumber = deviceID;
     const serial = await deviceModel.findOne({ serialNumber });
     if (!serial) {
@@ -27,6 +30,24 @@ export const putData = async ({ description, data, deviceId, recordedAt, serialN
   } catch (err) {
     throw err;
   }
+};
+
+export const lastData = async (deviceID) => {
+  try {
+    // Check for and return last data
+    const dataTable = await sensorDataModel.find({
+      deviceID: deviceID,
+    });
+
+    if (!dataTable) { // Check to make sure there is data
+      throw new Error ('No data found');
+    }
+    return dataTable;
+
+  } catch (err) {
+    throw err;
+  }
+
 };
 
 export const deleteData = async (id) => {

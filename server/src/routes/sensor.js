@@ -1,15 +1,18 @@
-import { putData, deleteData } from '../app/sensor';
+import { 
+  putData,
+  lastData,
+  deleteData,
+} from '../app/sensor';
 
 export default {
   create: async (req, res) => {
-    const { description, data, deviceId, recordedAt, serialNumber } = req.body;
+    const { description, data, deviceID, recordedAt } = req.body;
     try {
       const deviceData = await putData({
         description,
         data,
-        deviceId,
+        deviceID,
         recordedAt,
-        serialNumber
       });
       // Success adding device data
       res.status(200).send(deviceData);
@@ -19,7 +22,9 @@ export default {
   },
   get: async (req, res) => {
     try {
-      res.send('200');
+      const { sensorRequested } = req.params;
+      const sensorData = await lastData(sensorRequested);
+      res.send(sensorData);
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
