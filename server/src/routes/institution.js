@@ -8,6 +8,7 @@ import {
   listInstitutionUser,
   addInstitutionUser,
   deleteInstitutionUser,
+  patchInstitutionUser,
 } from '../app/institution';
 
 export default {
@@ -86,6 +87,15 @@ export default {
     try {
       const { id, institutionUserId } = req.params;
       const result = await deleteInstitutionUser(req.user, id, institutionUserId);
+      return res.send(result);
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  },
+  patchUser: async (req, res) => {
+    try {
+      const { id, institutionUserId } = req.params;
+      const result = await patchInstitutionUser(req.user, id, institutionUserId);
       return res.send(result);
     } catch (err) {
       res.status(500).send({ message: err.message });

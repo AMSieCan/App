@@ -67,6 +67,19 @@ export default ({ history, match }) => {
     }
   };
 
+  const onPatchUser = async (id) => {
+    try {
+      await Axios.patch(`${Environment.API_URL}/institutions/${institutionId}/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
+        },
+      });
+      setUsers(users.filter((u) => u._id !== id));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   // Get users
   useEffect(() => {
     const getUsers = async () => {
@@ -120,7 +133,7 @@ export default ({ history, match }) => {
                   icon="edit"
                   onClick={(e) => {
                     e.stopPropagation();
-                    //onDeleteUser(user._id);
+                    onPatchUser(user._id);
                   }}
                 ></Button>
               </Table.Cell>

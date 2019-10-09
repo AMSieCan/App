@@ -221,6 +221,28 @@ export const deleteInstitutionUser = async (user, id, institutionUserId) => {
   }
 };
 
+export const patchInstitutionUser = async (user, id, institutionUserId) => {
+  try {
+    // Check that user exists
+    const checkUser = await institutionUserModel.findOne({
+      _id: institutionUserId,
+      institutionId: id,
+    });
+
+    if (!checkUser) {
+      throw new Error('User does not exist in this institution.');
+    }
+    
+    if (checkUser.role === INSTITUTION_ROLE.ADMIN) checkUser.role = INSTITUTION_ROLE.USER;
+    else if (checkUser.role === INSTITUTION_ROLE.USER) checkUser.role = INSTITUTION_ROLE.ADMIN;
+
+    checkUser.role.save();
+    return checkUser.role;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const listInstitutionDevice = async (user, id) => {
   try {
     const devices = await deviceModel.find({

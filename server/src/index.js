@@ -99,6 +99,7 @@ app.get('/institutions', isAuthenticated, institution.list);
 app.post('/institutions/:id/users', isAuthenticated, institution.addUser);
 app.get('/institutions/:id/users', isAuthenticated, institution.listUser);
 app.delete('/institutions/:id/users/:institutionUserId', isAuthenticated, institution.deleteUser);
+app.patch('/institutions/:id/users/:institutionUserId', isAuthenticated, institution.patchUser);
 
 // Institution devices
 app.get('/institutions/:id/devices', isAuthenticated, institution.listDevice);
