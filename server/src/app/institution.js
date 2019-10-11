@@ -223,21 +223,25 @@ export const deleteInstitutionUser = async (user, id, institutionUserId) => {
 
 export const patchInstitutionUser = async (user, id, institutionUserId) => {
   try {
-    // Check that user exists
-    const checkUser = await institutionUserModel.findOne({
+    // Get user role
+    const getRole = await institutionUserModel.findOne({
       _id: institutionUserId,
       institutionId: id,
     });
+    var newRole;
+    if (getRole.role === INSTITUTION_ROLE.ADMIN) newRole = INSTITUTION_ROLE.USER;
+    else if (getRole.role === INSTITUTION_ROLE.USER) newRole = INSTITUTION_ROLE.ADMIN;
+    // Find user and update role
+    const updateRole = await institutionUserModel.findOneAndUpdate({
+      _id: institutionUserId,
+      institutionId: id,
+    }, {role: newRole}, {new: true});
 
-    if (!checkUser) {
+    if (!updateRole) {
       throw new Error('User does not exist in this institution.');
     }
     
-    if (checkUser.role === INSTITUTION_ROLE.ADMIN) checkUser.role = INSTITUTION_ROLE.USER;
-    else if (checkUser.role === INSTITUTION_ROLE.USER) checkUser.role = INSTITUTION_ROLE.ADMIN;
-
-    checkUser.role.save();
-    return checkUser.role;
+    return updateRole.role;
   } catch (err) {
     throw err;
   }

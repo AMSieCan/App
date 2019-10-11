@@ -69,12 +69,13 @@ export default ({ history, match }) => {
 
   const onPatchUser = async (id) => {
     try {
-      await Axios.patch(`${Environment.API_URL}/institutions/${institutionId}/users/${id}`, {
+      await Axios.patch(`${Environment.API_URL}/institutions/${institutionId}/users/${id}`,
+      { },
+      {
         headers: {
           Authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
       });
-      setUsers(users.filter((u) => u._id !== id));
     } catch (err) {
       alert(err.message);
     }
@@ -111,7 +112,7 @@ export default ({ history, match }) => {
           <Table.Row>
             <Table.HeaderCell>User</Table.HeaderCell>
             <Table.HeaderCell>Role</Table.HeaderCell>
-            <Table.HeaderCell textAlign="right">Edit</Table.HeaderCell>
+            <Table.HeaderCell textAlign="right">Switch Role</Table.HeaderCell>
             <Table.HeaderCell textAlign="right">Remove</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
