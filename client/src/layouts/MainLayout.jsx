@@ -17,29 +17,25 @@ const MainLayout = ({ children, history, advanced = true }) => {
           {advanced && (
             <>
               <Link to={`/institutions/${institutionId}`}>
-                <Menu.Item name="Map" />
+                <Menu.Item name="Map" icon="map" />
               </Link>
               <Link to={`/institutions/${institutionId}/services`}>
-                <Menu.Item name="Service" />
+                <Menu.Item name="Service" icon="clipboard list" />
               </Link>
               <Link to={`/institutions/${institutionId}/devices`}>
-                <Menu.Item name="Devices" />
+                <Menu.Item name="Devices" icon="microchip" />
               </Link>
               <Link to={`/institutions/${institutionId}/users`}>
-                <Menu.Item name="Users" />
+                <Menu.Item name="Users" icon="users" />
               </Link>
               <Link to={`/institutions/${institutionId}/settings`}>
-                <Menu.Item name="Settings" />
+                <Menu.Item name="Settings" icon="settings" />
+              </Link>
+              <Link to={'/login'} onClick={() => { Cookies.remove('accessToken'); }}>
+                <Menu.Item name="Logout" icon="log out" />
               </Link>
             </>
           )}
-          <Menu.Item
-            name="Logout"
-            onClick={() => {
-              Cookies.remove('accessToken');
-              history.push('/login');
-            }}
-          />
         </Menu>
       </div>
       <div>{children}</div>
