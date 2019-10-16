@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Form,
-  Grid,
-  Message,
-  Table,
-  Modal,
-  Input,
-  Select
-} from 'semantic-ui-react';
+import { Button, Form, Grid, Message, Table, Modal, Input, Select } from 'semantic-ui-react';
 import Cookies from 'js-cookie';
 import Axios from 'axios';
 import update from 'immutability-helper';
@@ -19,16 +10,31 @@ export default ({ history, match }) => {
   const [users, setUsers] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [createUserModal, setCreateUserModal] = useState(false);
+  const [editUserModal, setEditUserModal] = useState(false);
   const [userForm, setUserForm] = useState({
     emailAddress: '',
-    role: ''
+    role: '',
+  });
+
+  const [editUserForm, setEditUserForm] = useState({
+    _id: '',
+    role: '',
+    emailAddress: '',
+    index: 0,
   });
 
   const onCloseModal = () => {
+    setEditUserModal(false);
     setCreateUserModal(false);
     setUserForm({
       emailAddress: '',
-      role: ''
+      role: '',
+    });
+    setEditUserForm({
+      index: 0,
+      _id: '',
+      role: '',
+      emailAddress: '',
     });
   };
 
@@ -67,31 +73,40 @@ export default ({ history, match }) => {
     }
   };
 
-  const onPatchUser = async (id) => {
+  const onPatchUser = async () => {
     try {
-      await Axios.patch(`${Environment.API_URL}/institutions/${institutionId}/users/${id}`,
-      { },
-      {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('accessToken')}`,
+      const newRole = await Axios.patch(
+        `${Environment.API_URL}/institutions/${institutionId}/users/${editUserForm._id}`,
+        {
+          role: editUserForm.role,
         },
-      });
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  // Get users
-  useEffect(() => {
-    const getUsers = async () => {
-      const result = await Axios.get(
-        `${Environment.API_URL}/institutions/${institutionId}/users`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get('accessToken')}`,
           },
         },
       );
+      setUsers(
+        update(users, {
+          [editUserForm.index]: {
+            $set: newRole.data,
+          },
+        }),
+      );
+      onCloseModal();
+    } catch (err) {
+      setErrorMessage(err.message);
+    }
+  };
+
+  // Get users
+  useEffect(() => {
+    const getUsers = async () => {
+      const result = await Axios.get(`${Environment.API_URL}/institutions/${institutionId}/users`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
+        },
+      });
       if (result.data) {
         setUsers(result.data);
       }
@@ -118,14 +133,8 @@ export default ({ history, match }) => {
         </Table.Header>
 
         <Table.Body>
-          {users.map((user) => (
-            <Table.Row
-              className="selectable"
-              key={user._id}
-              onClick={() => {
-                history.push(`/institutions/${institutionId}/users/${user._id}`);
-              }}
-            >
+          {users.map((user, index) => (
+            <Table.Row key={user._id}>
               <Table.Cell>{user.emailAddress}</Table.Cell>
               <Table.Cell>{user.role}</Table.Cell>
               <Table.Cell textAlign="right">
@@ -134,7 +143,13 @@ export default ({ history, match }) => {
                   icon="edit"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onPatchUser(user._id);
+                    setEditUserModal(true);
+                    setEditUserForm({
+                      _id: user._id,
+                      role: user.role,
+                      emailAddress: user.emailAddress,
+                      index,
+                    });
                   }}
                 ></Button>
               </Table.Cell>
@@ -181,9 +196,12 @@ export default ({ history, match }) => {
                   <Form.Field>
                     <label>Role</label>
                     <Select
-                      options={[{ key: 'USER', text: 'USER', value: 'USER' }, { key: 'ADMIN', text: 'ADMIN', value: 'ADMIN' }]}
+                      options={[
+                        { key: 'USER', text: 'USER', value: 'USER' },
+                        { key: 'ADMIN', text: 'ADMIN', value: 'ADMIN' },
+                      ]}
                       value={userForm.role}
-                      defaultValue='USER'
+                      defaultValue="USER"
                       onChange={(e, data) =>
                         setUserForm(
                           update(userForm, {
@@ -206,6 +224,55 @@ export default ({ history, match }) => {
           </Button>
           <Button onClick={() => onCreateUser()} positive>
             Add
+          </Button>
+        </Modal.Actions>
+      </Modal>
+
+      <Modal open={editUserModal} onClose={() => onCloseModal()}>
+        <Modal.Header>Edit user</Modal.Header>
+        <Modal.Content>
+          {errorMessage && <Message negative>{errorMessage}</Message>}
+          <Form>
+            <Grid>
+              <Grid.Row columns="2">
+                <Grid.Column>
+                  <Form.Field>
+                    <label>User</label>
+                    <Input value={editUserForm.emailAddress} readOnly />
+                  </Form.Field>
+                </Grid.Column>
+                <Grid.Column>
+                  <Form.Field>
+                    <label>Role</label>
+                    <Select
+                      options={[
+                        { key: 'USER', text: 'USER', value: 'USER' },
+                        { key: 'ADMIN', text: 'ADMIN', value: 'ADMIN' },
+                      ]}
+                      value={editUserForm.role}
+                      defaultValue="USER"
+                      onChange={(e, data) =>
+                        setEditUserForm(
+                          update(editUserForm, {
+                            role: {
+                              $set: data.value,
+                            },
+                          }),
+                        )
+                      }
+                    />
+                  </Form.Field>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => onCloseModal()} negative>
+            Cancel
+          </Button>
+          <Button onClick={() => onPatchUser()} positive>
+            Save
           </Button>
         </Modal.Actions>
       </Modal>

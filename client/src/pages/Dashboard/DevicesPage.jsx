@@ -69,7 +69,7 @@ export default ({ history, match }) => {
         }),
       );
     } catch (err) {
-      setErrorMessage(err.response.data.message);
+      setErrorMessage(err.message);
     }
   };
 
