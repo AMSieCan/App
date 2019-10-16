@@ -1,6 +1,13 @@
 import { deviceModel, sensorDataModel } from '../model/index';
 
-export const addDevice = async ({ serialNumber, name, locationDescription, lat, long, institutionId }) => {
+export const addDevice = async ({
+  serialNumber,
+  name,
+  locationDescription,
+  lat,
+  long,
+  institutionId,
+}) => {
   try {
     const serial = await deviceModel.findOne({ serialNumber });
     if (serial) {
@@ -17,7 +24,7 @@ export const addDevice = async ({ serialNumber, name, locationDescription, lat, 
     });
 
     if (newDevice) {
-      return newDevice;
+      return { ...newDevice.toJSON(), sensorData: { distance: 0, count: 0 } };
     }
 
     throw new Error('Failed to add device');
@@ -55,7 +62,7 @@ export const getDevice = async (user, id) => {
       { distance: 0, count: 0 },
     );
 
-    return {...device.toJSON(), sensorData };
+    return { ...device.toJSON(), sensorData };
   } catch (err) {
     throw err;
   }
