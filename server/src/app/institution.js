@@ -221,31 +221,58 @@ export const deleteInstitutionUser = async (user, id, institutionUserId) => {
   }
 };
 
-export const patchInstitutionUser = async (user, id, institutionUserId) => {
+export const patchInstitutionUser = async (user, id, institutionUserId, role) => {
   try {
-    // Get user role
+    // Check if the editor has admin role
     const getRole = await institutionUserModel.findOne({
-      _id: institutionUserId,
       institutionId: id,
+      userId: user._id,
     });
-    var newRole;
-    if (getRole.role === INSTITUTION_ROLE.ADMIN) newRole = INSTITUTION_ROLE.USER;
-    else if (getRole.role === INSTITUTION_ROLE.USER) newRole = INSTITUTION_ROLE.ADMIN;
+
+    if (!getRole) {
+      throw new Error('Role not found');
+    }
+
     // Find user and update role
-    const updateRole = await institutionUserModel.findOneAndUpdate({
-      _id: institutionUserId,
-      institutionId: id,
-    }, {role: newRole}, {new: true});
+    const updateRole = await institutionUserModel.findOneAndUpdate(
+      {
+        _id: institutionUserId,
+        institutionId: id,
+      },
+      { role },
+      {
+        new: true,
+      },
+    );
 
     if (!updateRole) {
       throw new Error('User does not exist in this institution.');
     }
-    
-    return updateRole.role;
+
+    // Get data
+    // createdAt
+    // emailAddress
+    // role
+    // updatedAt: "2019-10-16T17:19:41.064Z"
+    // _id: "0cd3be2a-b16e-414f-9251-7a285c0a0d66"
+
+    const updatedUserRole = await userModel.findById(updateRole.userId);
+
+    if (!updatedUserRole) {
+      throw new Error("user not found")
+    }
+
+    return {
+      _id: updateRole._id,
+      role,
+      emailAddress: updatedUserRole.emailAddress,
+      updatedAt: updateRole.updatedAt,
+      createdAt: updateRole.createdAt,
+    };
   } catch (err) {
     throw err;
   }
-}
+};
 
 export const listInstitutionDevice = async (user, id) => {
   try {

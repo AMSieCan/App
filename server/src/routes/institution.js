@@ -15,7 +15,15 @@ export default {
   create: async (req, res) => {
     const { name, streetAddress, city, state, lat, long } = req.body;
     try {
-      const institution = await createInstitution(req.user._id, name, streetAddress, city, state, lat, long);
+      const institution = await createInstitution(
+        req.user._id,
+        name,
+        streetAddress,
+        city,
+        state,
+        lat,
+        long,
+      );
       res.send(institution);
     } catch (err) {
       res.status(500).send({ message: err.message });
@@ -95,7 +103,8 @@ export default {
   patchUser: async (req, res) => {
     try {
       const { id, institutionUserId } = req.params;
-      const result = await patchInstitutionUser(req.user, id, institutionUserId);
+      const { role } = req.body;
+      const result = await patchInstitutionUser(req.user, id, institutionUserId, role);
       return res.send(result);
     } catch (err) {
       res.status(500).send({ message: err.message });

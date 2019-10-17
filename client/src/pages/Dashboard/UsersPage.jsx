@@ -13,7 +13,7 @@ export default ({ history, match }) => {
   const [editUserModal, setEditUserModal] = useState(false);
   const [userForm, setUserForm] = useState({
     emailAddress: '',
-    role: '',
+    role: 'USER',
   });
 
   const [editUserForm, setEditUserForm] = useState({
@@ -28,7 +28,7 @@ export default ({ history, match }) => {
     setCreateUserModal(false);
     setUserForm({
       emailAddress: '',
-      role: '',
+      role: 'USER',
     });
     setEditUserForm({
       index: 0,

@@ -63,6 +63,7 @@ export default {
   },
   patch: async (req, res) => {
     try {
+      
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
