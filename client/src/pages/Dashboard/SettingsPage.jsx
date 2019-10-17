@@ -175,6 +175,25 @@ export default ({ history, match }) => {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
+              <Form.Field>
+                <label>Logo URL</label>
+                <Input
+                  value={institution.logo}
+                  onChange={(e) =>
+                    setInstitution(
+                      update(institution, {
+                        logo: {
+                          $set: e.target.value,
+                        },
+                      }),
+                    )
+                  }
+                />
+              </Form.Field>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
               <Button onClick={() => onSaveSettings()} primary>
                 Save
               </Button>

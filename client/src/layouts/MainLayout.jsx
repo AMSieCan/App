@@ -1,10 +1,30 @@
-import React from 'react';
-import { Menu } from 'semantic-ui-react';
+import React, { useEffect, useState } from 'react';
+import { Menu, Image } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Environment from '../utils/environment';
+import Axios from 'axios';
 
 const MainLayout = ({ children, history, advanced = true }) => {
   const institutionId = history.location.pathname.replace('/institutions', '').split('/')[1];
+  const [institution, setInstitution] = useState({});
+  const institutionLogo = institution.logo;
+
+  // Get institution data
+  useEffect(() => {
+    const getInstitutionData = async () => {
+      const result = await Axios.get(`${Environment.API_URL}/institutions/${institutionId}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
+        },
+      });
+      if (result.data) {
+        setInstitution(result.data);
+      }
+    };
+    getInstitutionData();
+  }, []);
+
   return (
     <div>
       <div>
@@ -34,6 +54,9 @@ const MainLayout = ({ children, history, advanced = true }) => {
               <Link to={'/login'} onClick={() => { Cookies.remove('accessToken'); }}>
                 <Menu.Item name="Logout" icon="log out" />
               </Link>
+              <Menu.Item position="right">
+                <Image src={institutionLogo} size="small" />
+              </Menu.Item>
             </>
           )}
         </Menu>

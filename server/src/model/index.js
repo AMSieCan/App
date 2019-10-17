@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 require('mongoose-type-email');
+require('mongoose-type-url');
 import uuid from 'uuid/v4';
 
 export const userModel = mongoose.model(
@@ -92,6 +93,7 @@ export const institutionModel = mongoose.model(
       state: String,
       lat: Number,
       long: Number,
+      logo: mongoose.SchemaTypes.Url,
     },
     {
       timestamps: {

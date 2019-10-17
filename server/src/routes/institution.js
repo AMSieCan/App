@@ -13,7 +13,7 @@ import {
 
 export default {
   create: async (req, res) => {
-    const { name, streetAddress, city, state, lat, long } = req.body;
+    const { name, streetAddress, city, state, lat, long, logo } = req.body;
     try {
       const institution = await createInstitution(
         req.user._id,
@@ -23,6 +23,7 @@ export default {
         state,
         lat,
         long,
+        logo,
       );
       res.send(institution);
     } catch (err) {
@@ -41,7 +42,7 @@ export default {
   patch: async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, streetAddress, city, state, lat, long } = req.body;
+      const { name, streetAddress, city, state, lat, long, logo } = req.body;
       const institution = await patchInstitution(req.user, id, {
         name,
         streetAddress,
@@ -49,6 +50,7 @@ export default {
         state,
         lat,
         long,
+        logo,
       });
       res.send(institution);
     } catch (err) {

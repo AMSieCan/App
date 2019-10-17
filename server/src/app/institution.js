@@ -35,7 +35,7 @@ export const listInstitution = async (user) => {
   }
 };
 
-export const createInstitution = async (userId, name, streetAddress, city, state, lat, long) => {
+export const createInstitution = async (userId, name, streetAddress, city, state, lat, long, logo) => {
   try {
     // Find all institution the user belongs to
     const newInstitution = await institutionModel.create({
@@ -45,6 +45,7 @@ export const createInstitution = async (userId, name, streetAddress, city, state
       state,
       lat,
       long,
+      logo,
     });
 
     // Add the ownerId into
@@ -102,7 +103,7 @@ export const deleteInstitution = async (user, id) => {
 export const patchInstitution = async (
   user,
   id,
-  { name, streetAddress, city, state, lat, long },
+  { name, streetAddress, city, state, lat, long, logo },
 ) => {
   try {
     // Check if user belong to this institution
@@ -133,6 +134,9 @@ export const patchInstitution = async (
     }
     if (long) {
       instUser.institutionId.long = long;
+    }
+    if (logo) {
+      instUser.institutionId.logo = logo;
     }
 
     instUser.institutionId.save();

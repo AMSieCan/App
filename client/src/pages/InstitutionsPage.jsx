@@ -22,6 +22,7 @@ export default ({ history, match }) => {
     state: '',
     lat: '',
     long: '',
+    logo: 'https://raw.githubusercontent.com/csumb/logos/master/csumb-logo-white.png',
   });
 
   const [user, setUser] = useState();
@@ -68,6 +69,7 @@ export default ({ history, match }) => {
       state: '',
       lat: '',
       long: '',
+      logo: '',
     });
   };
 
@@ -81,6 +83,7 @@ export default ({ history, match }) => {
       state: '',
       lat: '',
       long: '',
+      logo: '',
     });
   };
 
