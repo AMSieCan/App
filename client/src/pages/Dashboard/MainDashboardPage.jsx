@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import Environment from '../../utils/environment.js';
 import { Loader } from 'semantic-ui-react';
 
-const Pointer = ({ onClick, name, status, location }) => {
+const Pointer = ({ onClick, name, status, location, serial }) => {
   var color = 'green';
   if (status > 80) color = 'red';
   // Determine the bin's CSS color.
@@ -15,7 +15,7 @@ const Pointer = ({ onClick, name, status, location }) => {
   return (
     <div>
       <div
-        onClick={() => onClick({ name, status, location })}
+        onClick={() => onClick({ name, status, location, serial })}
         role="tooltip"
         x-placement="top"
         style={{ top: '-77px', left: '-77px' }}
@@ -85,6 +85,7 @@ export default ({ match }) => {
             <Pointer
               key={device._id}
               name={device.name}
+              serial={device.serialNumber}
               status={device.sensorData.distance}
               onClick={(data) => setBin(data)}
               lat={device.lat}
@@ -96,7 +97,7 @@ export default ({ match }) => {
       </div>
       <Drawer
         drawerStyle={{ overflow: 'none', background: '#fff' }}
-        right={'true'}
+        right={true}
         open={!!bin}
         onChange={(e) => {
           if (!e) {
@@ -106,7 +107,7 @@ export default ({ match }) => {
       >
         {bin && (
           <div>
-            <DrawerInfo binName={bin.name} binStatus={bin.status} binLocation={bin.location} />
+            <DrawerInfo binName={bin.name} binStatus={bin.status} binLocation={bin.location} binSerial={bin.serial} />
           </div>
         )}
       </Drawer>

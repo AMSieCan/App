@@ -94,7 +94,7 @@ export default ({ history, match }) => {
   return (
     <div className="content">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h1>Device(s)</h1>
+        <h1>Devices</h1>
         <Button onClick={() => setCreateDeviceModal(true)} primary size="small">
           Create New
         </Button>

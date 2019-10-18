@@ -1,32 +1,28 @@
 import React from "react"
 import binData from "./../binData"
 
-
-
 function DrawerInfo(prop){
   return (
-    <div class="ui list" style={{padding: '20px'}} >
-            <div class="item" >
-              <div class="header"><h3>Unit Information: 
-              <h3>{prop.binName}</h3></h3>
-              </div>
-                 <div class="header">Location Description</div>
-                 <p>{prop.binLocation}</p>
-                 <div class="header">Last Visited</div>
-                 (Days ago)
-                 <div class="header">Current Status</div>
-                 <p>{prop.binStatus}% Full</p>
-                 <div class="header">Equipment Info</div>
-                 (Battery OK)
-                 (Status OK)
-                 <div class="header">Serial Info</div>
-                 (1234ABCD)
+    <div className="ui list" style={{padding: '20px'}} >
+            <div className="item" >
+              <div className="header">Unit Information:<h3>{prop.binName}</h3></div>
+              <div className="header">Location Description</div>
+              <p>{prop.binLocation}</p>
+              <div className="header">Last Visited</div>
+                (Days ago)
+              <div className="header">Current Status</div>
+              <p>{prop.binStatus}% Full</p>
+              <div className="header">Equipment Info</div>
+              (Battery OK)
+              (Status OK)
+              <div className="header">Serial Info</div>
+              {prop.binSerial}
             </div>
-            <div class="item">
-              <div class="header"><h4>Maintenance</h4></div>
+            <div className="item">
+              <div className="header"><h4>Maintenance</h4></div>
                 <ScheduleVisit binname={prop.binName} />
-                <div class="header"><a href=""> Current Scheduled Reports</a></div>
-                <div class="header"><a href="">All Unit Status and Configuration</a></div>
+                <div className="header"><a href=""> Current Scheduled Reports</a></div>
+                <div className="header"><a href="">All Unit Status and Configuration</a></div>
               </div>
             </div>
   )
