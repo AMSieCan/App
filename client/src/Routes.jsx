@@ -12,9 +12,10 @@ export default () => {
       <Switch>
         <Route path="/login" exact component={Login} />
         <Route path="/signup" exact component={SignUp} />
-        <Route path="/" exact component={InstitutionsPage} />
+        <Route path="/" exact component={HomePage} />
         <Route path="/homepage" exact component={HomePage} />
-        <Route path="/institutions" component={Dashboard} />
+        <Route path="/institutions" exact component={InstitutionsPage} />
+        <Route path="/institutions/:id" component={Dashboard} />
       </Switch>
     </Router>
   );

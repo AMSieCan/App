@@ -107,7 +107,7 @@ class DesktopContainer extends Component {
             >
               <Container>
               <Menu.Item>
-                <Link to={`/signup`}>
+                <Link to={`/institutions`}>
                   <i className="trash icon" style={{ color: 'white' }}></i> AMSie Can
                 </Link>
               </Menu.Item>
@@ -318,7 +318,7 @@ const HomepageLayout = () => (
             <Grid.Column width={3}>
               <Header inverted as='h4' content='About' />
               <List link inverted>
-                <List.Item as='a'><Link to={`/signup`}> Signup</Link></List.Item>
+                <List.Item as='a'><Link to={`/signup`}>Signup</Link></List.Item>
                 <List.Item as='a'><Link to={`/login`}>Login</Link></List.Item>
                 
               </List>
@@ -326,8 +326,8 @@ const HomepageLayout = () => (
             <Grid.Column width={3}>
               <Header inverted as='h4' content='Services' />
               <List link inverted>
-                <List.Item as='a'><Link to={`/login`}>Check Status</Link></List.Item>
-                <List.Item as='a'><Link to={`/login`}>Add Device</Link></List.Item>
+                <List.Item as='a'><Link to={`/institutions`}>Check Status</Link></List.Item>
+                <List.Item as='a'><Link to={`/institutions`}>Add Device</Link></List.Item>
                 
               </List>
             </Grid.Column>
